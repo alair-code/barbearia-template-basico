@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const config = window.CONFIG || CONFIG;
+  const config = CONFIG;
   const whatsappUrl = "https://wa.me/" + String(config.whatsapp).replace(/\D/g, "") +
     "?text=" + encodeURIComponent(config.whatsappMensagem);
 
@@ -53,10 +53,11 @@
   const menuToggle = document.querySelector(".menu-toggle");
   const siteMenu = document.querySelector("#site-menu");
 
-  const closeMenu = () => {
+  const closeMenu = (restoreFocus = false) => {
     menuToggle.setAttribute("aria-expanded", "false");
     siteMenu.classList.remove("is-open");
     menuToggle.setAttribute("aria-label", "Abrir menu");
+    if (restoreFocus) menuToggle.focus();
   };
 
   menuToggle.addEventListener("click", () => {
@@ -66,23 +67,31 @@
     menuToggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
   });
 
-  siteMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
+  siteMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => closeMenu()));
 
   const lightbox = document.querySelector("#lightbox");
   const lightboxImage = document.querySelector("#lightbox-image");
   const closeLightboxButton = document.querySelector(".lightbox-close");
+  let activeGalleryTrigger = null;
 
   const closeLightbox = () => {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
     lightboxImage.src = "";
     document.body.classList.remove("no-scroll");
+    if (activeGalleryTrigger) {
+      activeGalleryTrigger.focus();
+      activeGalleryTrigger = null;
+    }
   };
 
   galleryList.addEventListener("click", (event) => {
     const button = event.target.closest("[data-gallery-index]");
     if (!button) return;
     const image = config.galeria[Number(button.dataset.galleryIndex)];
+    if (!image) return;
+
+    activeGalleryTrigger = button;
     lightboxImage.src = image.src;
     lightboxImage.alt = image.alt;
     lightbox.classList.add("is-open");
@@ -97,7 +106,14 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+      closeLightbox();
+      return;
+    }
+
+    if (event.key === "Escape" && menuToggle.getAttribute("aria-expanded") === "true") {
+      closeMenu(true);
+    }
   });
 
   document.querySelector("#current-year").textContent = new Date().getFullYear();
