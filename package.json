@@ -1,0 +1,9 @@
+{
+  "name": "barbearia-basico",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Template estático, leve e reutilizável para pequenas barbearias.",
+  "scripts": {
+    "check": "node --check javascript/configuracao.js && node --check javascript/script.js"
+  }
+}
