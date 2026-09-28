@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Barbearia profissional para quem valoriza estilo, cuidado e qualidade.">
+  <meta name="description" content="Barbearia profissional para quem valoriza estilo, cuidado e qualidade." data-meta-config="description">
   <meta name="theme-color" content="#111111">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Barbearia Básico">
-  <meta property="og:description" content="Seu estilo começa aqui.">
-  <meta property="og:image" content="recursos/identidade/logo.svg">
-  <title>Barbearia Básico | Seu estilo começa aqui.</title>
+  <meta property="og:title" content="Barbearia Básico" data-meta-config="og:title">
+  <meta property="og:description" content="Seu estilo começa aqui." data-meta-config="og:description">
+  <meta property="og:image" content="recursos/identidade/logo.svg" data-meta-config="og:image">
+  <title data-meta-config="title">Barbearia Básico | Seu estilo começa aqui.</title>
   <link rel="icon" href="recursos/identidade/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="estilos/style.css">
 </head>
@@ -51,16 +51,22 @@
       </div>
     </section>
 
+    <section class="trust-strip" aria-label="Diferenciais da barbearia">
+      <div class="container trust-grid">
+        <div><strong>ATENDIMENTO PERSONALIZADO</strong><span>Seu estilo em primeiro lugar</span></div>
+        <div><strong>PROFISSIONALISMO</strong><span>Cuidado em cada detalhe</span></div>
+        <div><strong>PRATICIDADE</strong><span>Agende de forma simples</span></div>
+        <div><strong>QUALIDADE</strong><span>Acabamento feito com atenção</span></div>
+      </div>
+    </section>
+
     <section class="section section-light" id="sobre">
       <div class="container about-grid">
         <div>
           <p class="section-kicker">SOBRE A BARBEARIA</p>
-          <h2>Mais do que um corte, uma experiência.</h2>
+          <h2 data-config="sobreTitulo">Mais do que um corte, uma experiência.</h2>
         </div>
-        <div class="about-copy">
-          <p>Um espaço pensado para quem gosta de se cuidar, renovar o visual e sair satisfeito. Personalize este texto com a história, os diferenciais e o estilo da barbearia do seu cliente.</p>
-          <p>Atendimento próximo, ambiente confortável e serviços feitos com atenção aos detalhes.</p>
-        </div>
+        <div class="about-copy" id="about-copy"></div>
       </div>
     </section>
 
@@ -74,6 +80,30 @@
           <p>Serviços essenciais para manter o visual sempre em dia.</p>
         </div>
         <div class="services-grid" id="services-list"></div>
+      </div>
+    </section>
+
+    <section class="section section-light" id="diferenciais">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">POR QUE ESCOLHER</p>
+            <h2>Feito para você sair daqui satisfeito.</h2>
+          </div>
+          <p>Uma apresentação clara dos pontos fortes que podem ser personalizados para cada cliente.</p>
+        </div>
+        <div class="differentials-grid" id="differentials-list"></div>
+      </div>
+    </section>
+
+    <section class="section section-dark section-cta" id="agendar">
+      <div class="container cta-panel">
+        <div>
+          <p class="section-kicker">AGENDAMENTO</p>
+          <h2 data-config="ctaTitulo">Gostou de algum serviço?</h2>
+          <p data-config="ctaDescricao">Chame no WhatsApp e combine seu próximo horário.</p>
+        </div>
+        <a class="button" data-whatsapp-link href="#" target="_blank" rel="noopener noreferrer">Agendar agora</a>
       </div>
     </section>
 
@@ -91,6 +121,13 @@
     </section>
 
     <section class="contact-section" id="contato">
+      <div class="container">
+        <div class="location-heading">
+          <p class="section-kicker">LOCALIZAÇÃO</p>
+          <h2 data-config="localTitulo">Visite a barbearia</h2>
+          <p data-config="localDescricao">Confira o endereço, horário de atendimento e como chegar.</p>
+        </div>
+      </div>
       <div class="container contact-grid">
         <div>
           <p class="section-kicker">CONTATO</p>
