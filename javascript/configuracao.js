@@ -1,58 +1,53 @@
-// Personalize o template neste único arquivo.
+// ============================================================
+// CONFIGURAÇÃO DO CLIENTE
+// ============================================================
+// Este é o principal arquivo para personalizar uma nova barbearia.
+// Na maioria dos casos, você só precisa alterar os valores abaixo.
+// As CORES do site são configuradas no início de estilos/style.css.
 // Não é necessário alterar o HTML para trocar os dados principais.
 
 const CONFIG = {
+  // NOME: nome que aparece no cabeçalho, rodapé e textos configuráveis.
   nome: "Barbearia Básico",
-  // Logo padrão ilustrativa — substitua pela logo real do cliente quando ele enviar.
+  // LOGO: caminho da logo dentro de recursos/identidade/.
   logo: "recursos/identidade/logo.svg",
-  // Favicon padrão — substitua pelo favicon real do cliente quando ele enviar.
+  // FAVICON: ícone da aba do navegador.
   favicon: "recursos/identidade/favicon.svg",
-  descricao: "Seu visual, seu estilo, sua melhor versão. Um atendimento pensado para você sair satisfeito e voltar quando quiser.",
-  heroTitle: "Seu próximo visual começa aqui.",
-  seoTitle: "Barbearia Básico | Seu próximo visual começa aqui.",
-  seoDescription: "Conheça nossos serviços, veja nossos resultados e escolha seu próximo visual. Agende seu horário pelo WhatsApp.",
-  // Para compartilhamento social, prefira uma imagem JPG/PNG local ou uma URL absoluta.
-  ogImage: "recursos/identidade/logo.svg",
-  cores: {
-    principal: "#c9a66b",
-    fundo: "#0b0b0b",
-    superficie: "#151515",
-    superficieAlternativa: "#1d1d1d",
-    texto: "#f5f3ee",
-    textoSuave: "#aaa7a0"
-  },
-  sobre: {
+  // DESCRIÇÃO: frase principal apresentada no topo do site.\n  descricao: "Seu visual, seu estilo, sua melhor versão. Um atendimento pensado para você sair satisfeito e voltar quando quiser.",
+  // TÍTULO PRINCIPAL: chamada de destaque da capa.\n  heroTitle: "Seu próximo visual começa aqui.",
+  // SEO: título usado no navegador e nos mecanismos de busca.\n  seoTitle: "Barbearia Básico | Seu próximo visual começa aqui.",
+  // SEO: descrição usada nos mecanismos de busca e compartilhamentos.\n  seoDescription: "Conheça nossos serviços, veja nossos resultados e escolha seu próximo visual. Agende seu horário pelo WhatsApp.",
+  // IMAGEM DE COMPARTILHAMENTO: usada quando o link for compartilhado em redes sociais.\n  ogImage: "recursos/identidade/logo.svg",
+  // SOBRE: título e textos da seção que apresenta a experiência da barbearia.\n  sobre: {
     titulo: "Mais do que cuidar do visual, é cuidar de você.",
     textos: [
       "Um espaço para quem valoriza um bom visual, gosta de se cuidar e quer se sentir bem com o resultado.",
       "Cada atendimento é uma oportunidade de renovar a aparência, elevar a confiança e sair pronto para a próxima."
     ]
   },
-  diferenciais: [
+  // DIFERENCIAIS: benefícios que ajudam a apresentar o serviço ao visitante.\n  diferenciais: [
     { titulo: "Seu estilo em primeiro lugar", descricao: "O serviço é adaptado para valorizar o visual que combina com você." },
     { titulo: "Detalhes que fazem diferença", descricao: "Do primeiro toque ao acabamento, cada detalhe contribui para um resultado bem cuidado." },
     { titulo: "Agendamento simples", descricao: "Escolha seu serviço, encontre um horário e envie seu pedido pelo WhatsApp." }
   ],
-  ctaTitulo: "Seu próximo visual pode começar agora.",
+  // CTA: chamada final para incentivar o visitante a agendar.\n  ctaTitulo: "Seu próximo visual pode começar agora.",
   ctaDescricao: "Escolha o serviço que você procura e reserve alguns minutos para cuidar do seu visual.",
-  localTitulo: "Venha viver a experiência.",
+  // LOCALIZAÇÃO: título e descrição da área de endereço e contato.\n  localTitulo: "Venha viver a experiência.",
   localDescricao: "Confira onde estamos, nossos horários e escolha o melhor momento para sua próxima visita.",
-  footer: {
+  // RODAPÉ: textos exibidos no final da página.\n  footer: {
     texto: "Todos os direitos reservados.",
     credito: "Desenvolvido com profissionalismo.",
     creditoUrl: ""
   },
 
-  heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
-  whatsapp: "5500000000000",
-  whatsappMensagem: "Olá! Gostaria de agendar meu próximo horário na barbearia.",
-  instagram: "@barbearia",
-  instagramUrl: "https://instagram.com/",
-  endereco: "Rua Exemplo, 123 — Centro",
-  mapaUrl: "https://maps.google.com/",
-  // Horários usados pelo agendamento. Chaves: 0=domingo, 1=segunda ... 6=sábado.
-  // Use null para dia fechado.
-  funcionamento: {
+  // CAPA: imagem principal do topo. Prefira arquivo local em recursos/imagens/.\n  heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
+  // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.\n  whatsapp: "5500000000000",
+  // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.\n  whatsappMensagem: "Olá! Gostaria de agendar meu próximo horário na barbearia.",
+  // INSTAGRAM: @ da barbearia exibido no contato.\n  instagram: "@barbearia",
+  // LINK DO INSTAGRAM: endereço completo do perfil.\n  instagramUrl: "https://instagram.com/",
+  // ENDEREÇO: endereço que será mostrado no site.\n  endereco: "Rua Exemplo, 123 — Centro",
+  // GOOGLE MAPS: cole aqui o link exato do local da barbearia.\n  mapaUrl: "https://maps.google.com/",
+  // HORÁRIOS: 0=domingo, 1=segunda ... 6=sábado.\n  // Use null quando a barbearia estiver fechada.\n  // Esses horários alimentam tanto a seção de contato quanto o agendamento.\n  funcionamento: {
     0: null,
     1: { abertura: "09:00", fechamento: "19:00" },
     2: { abertura: "09:00", fechamento: "19:00" },
@@ -62,7 +57,7 @@ const CONFIG = {
     6: { abertura: "09:00", fechamento: "19:00" }
   },
 
-  servicos: [
+  // SERVIÇOS: altere nome, descrição, preço e duração de cada serviço.\n  // A duração é usada para calcular os horários do agendamento.\n  servicos: [
     {
       nome: "Corte Masculino",
       descricao: "Corte personalizado de acordo com seu estilo.",
@@ -95,7 +90,7 @@ const CONFIG = {
     }
   ],
 
-  galeria: [
+  // GALERIA: troque src pelas fotos autorizadas do cliente e alt pela descrição da imagem.\n  galeria: [
     { src: "https://images.pexels.com/photos/4422101/pexels-photo-4422101.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro realizando corte masculino" },
     { src: "https://images.pexels.com/photos/5584458/pexels-photo-5584458.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
     { src: "https://images.pexels.com/photos/2076930/pexels-photo-2076930.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbearia com atendimento profissional" },
