@@ -166,6 +166,17 @@ button { font: inherit; }
   .whatsapp-float { animation: none; }
 }
 
+.booking-modal { position: fixed; inset: 0; z-index: 95; display: none; place-items: center; padding: 20px; background: rgba(0,0,0,.82); }
+.booking-modal.is-open { display: grid; }
+.booking-panel { position: relative; width: min(100%, 520px); max-height: min(90vh, 720px); overflow: auto; padding: 34px; border: 1px solid rgba(201,166,107,.35); border-radius: 22px; background: #111; color: var(--text); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.booking-panel h2 { margin: 0 0 10px; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; letter-spacing: -.045em; }
+.booking-status { margin: 0 0 24px; color: var(--muted); }
+.booking-close { position: absolute; top: 14px; right: 18px; border: 0; background: transparent; color: #fff; font-size: 2rem; line-height: 1; cursor: pointer; }
+#booking-form { display: grid; gap: 16px; }
+#booking-form label { display: grid; gap: 7px; color: #d8d4cc; font-size: .88rem; font-weight: 700; }
+#booking-form input, #booking-form select { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; background: #181818; color: #fff; }
+#booking-form select:disabled { opacity: .55; cursor: not-allowed; }
+#booking-form .button { width: 100%; margin-top: 6px; }
 .lightbox { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; padding: 30px; background: rgba(0,0,0,.9); }
 .lightbox.is-open { display: grid; }
 .lightbox img { max-width: min(1000px, 94vw); max-height: 88vh; object-fit: contain; }
