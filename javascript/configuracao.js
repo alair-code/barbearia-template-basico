@@ -149,3 +149,31 @@ const CONFIG = {
     { src: "recursos/imagens/galeria/galeria-06.svg", alt: "Resultado do atendimento" }
   ]
 };
+
+
+// ============================================================
+// PERFORMANCE DA CAPA
+// ============================================================
+// Como este arquivo é carregado antes do CSS, a capa pode ser
+// configurada imediatamente e pré-carregada pelo navegador.
+(() => {
+  const configuredHero = String(CONFIG.heroImage || "").trim();
+  if (!configuredHero || typeof document === "undefined") return;
+  const heroPath = /^(https?:|data:|file:|\/)/i.test(configuredHero)
+    ? configuredHero
+    : "recursos/imagens/capa/" + configuredHero.replace(/^\.\//, "");
+  const heroUrl = new URL(heroPath, document.baseURI).href;
+  document.documentElement.style.setProperty(
+    "--hero-image",
+    'url("' + heroUrl.replace(/"/g, "\\\"") + '")'
+  );
+  const existingPreload = document.querySelector('link[rel="preload"][as="image"][data-hero-preload]');
+  if (!existingPreload) {
+    const preload = document.createElement("link");
+    preload.rel = "preload";
+    preload.as = "image";
+    preload.href = heroUrl;
+    preload.dataset.heroPreload = "true";
+    document.head.appendChild(preload);
+  }
+})();
