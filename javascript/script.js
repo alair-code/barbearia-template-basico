@@ -64,7 +64,9 @@
   const bookingService = document.querySelector("#booking-service");
   const bookingTime = document.querySelector("#booking-time");
   const bookingStatus = document.querySelector("#booking-status");
+  const bookingDateContext = document.querySelector("#booking-date-context");
   const bookingClose = document.querySelector(".booking-close");
+  const bookingDateActions = document.querySelectorAll("[data-booking-date-action]");
   let activeBookingTrigger = null;
 
   // Converte a data atual para YYYY-MM-DD usando o horário local.
@@ -116,6 +118,31 @@
     return null;
   };
 
+  const formatBookingDateLabel = (isoDate) => {
+    if (!isoDate) return "";
+    const [year, month, day] = isoDate.split("-").map(Number);
+    return new Intl.DateTimeFormat("pt-BR", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    }).format(new Date(year, month - 1, day));
+  };
+
+  const setBookingDateContext = (isoDate) => {
+    if (!bookingDateContext) return;
+    bookingDateContext.textContent = isoDate
+      ? "Você está escolhendo horários para " + formatBookingDateLabel(isoDate) + "."
+      : "Escolha o dia do atendimento. Os horários serão calculados para a data selecionada.";
+  };
+
+  const addDaysToIso = (isoDate, days) => {
+    const [year, month, day] = isoDate.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + days);
+    return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
+  };
+
   // Mostra uma ação clara para continuar o agendamento em outro dia.
   const showNextDateOption = (fromDate) => {
     const existing = bookingStatus?.parentElement?.querySelector(".booking-next-day");
@@ -138,6 +165,7 @@
   const updateBookingTimes = () => {
     if (!bookingDate || !bookingTime || !bookingStatus) return;
     const selectedDate = bookingDate.value;
+    setBookingDateContext(selectedDate);
     const schedule = getSchedule(selectedDate);
     bookingTime.replaceChildren();
     bookingStatus.parentElement?.querySelector(".booking-next-day")?.remove();
@@ -242,6 +270,7 @@
       if (!bookingDate.value || bookingDate.value < bookingDate.min) bookingDate.value = bookingDate.min;
       updateBookingTimes();
     }
+    setBookingDateContext(bookingDate?.value || "");
     bookingName?.focus();
   };
 
@@ -281,6 +310,25 @@
 
   if (bookingDate) bookingDate.addEventListener("change", updateBookingTimes);
   if (bookingService) bookingService.addEventListener("change", updateBookingTimes);
+
+  bookingDateActions.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!bookingDate) return;
+      const action = button.dataset.bookingDateAction;
+      const today = todayIso();
+      let targetDate = today;
+
+      if (action === "tomorrow") {
+        targetDate = addDaysToIso(today, 1);
+      } else if (action === "next") {
+        targetDate = findNextOpenDate(today) || today;
+      }
+
+      bookingDate.value = targetDate;
+      updateBookingTimes();
+      bookingDate.focus();
+    });
+  });
   if (bookingClose) bookingClose.addEventListener("click", closeBooking);
   if (bookingModal) {
     bookingModal.addEventListener("click", (event) => {
