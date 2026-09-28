@@ -316,7 +316,7 @@
       return dayLabel + ": " + group.schedule.abertura + " às " + group.schedule.fechamento;
     }).join(" • ");
   };
-  setText("horario", formatOperatingHours() || config.horario || "Consulte os horários.");
+  setText("horario", formatOperatingHours() || "Consulte os horários.");
   setText("whatsappDisplay", config.whatsapp);
 
   const logo = document.querySelector(".brand img");
