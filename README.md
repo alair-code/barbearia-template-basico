@@ -33,9 +33,13 @@ barbearia-basico/
 
 ## Personalização rápida
 
-A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos, serviços, contatos, imagens e footer.
+A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos comerciais, serviços, contatos, imagens e footer.
 
-### Nome e descrição
+### Nome, descrição e copy comercial
+
+A estrutura de textos do template foi pensada para apresentar o serviço de forma comercial, despertar interesse e conduzir o visitante até o agendamento. Ao criar um novo cliente, mantenha a estrutura da copy e personalize apenas os dados reais da barbearia, serviços, preços, imagens e identidade visual.
+
+Os principais textos ficam em `CONFIG`, permitindo reutilizar a mesma estratégia de comunicação em diferentes barbearias sem alterar o HTML.
 
 Altere:
 
