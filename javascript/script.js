@@ -240,7 +240,7 @@
       option.textContent = slot;
       bookingTime.appendChild(option);
     });
-    bookingStatus.textContent = "Horários disponíveis: " + schedule.abertura + " às " + schedule.fechamento + ".";
+    bookingStatus.textContent = "Horários disponíveis para " + formatBookingDateLabel(selectedDate) + ": " + schedule.abertura + " às " + schedule.fechamento + ".";
   };
 
   // Abre o formulário de agendamento e preenche os serviços disponíveis.
