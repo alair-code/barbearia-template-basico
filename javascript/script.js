@@ -16,6 +16,11 @@
   };
 
   setText("nome", config.nome);
+
+  const logo = document.querySelector(".brand img");
+  if (logo && config.logo) {
+    logo.src = config.logo;
+  }
   setText("descricao", config.descricao);
   setText("heroTitle", config.heroTitle);
   setText("instagram", config.instagram);
