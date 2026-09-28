@@ -13,41 +13,64 @@ const CONFIG = {
   logo: "recursos/identidade/logo.svg",
   // FAVICON: ícone da aba do navegador.
   favicon: "recursos/identidade/favicon.svg",
-  // DESCRIÇÃO: frase principal apresentada no topo do site.\n  descricao: "Seu visual, seu estilo, sua melhor versão. Um atendimento pensado para você sair satisfeito e voltar quando quiser.",
-  // TÍTULO PRINCIPAL: chamada de destaque da capa.\n  heroTitle: "Seu próximo visual começa aqui.",
-  // SEO: título usado no navegador e nos mecanismos de busca.\n  seoTitle: "Barbearia Básico | Seu próximo visual começa aqui.",
-  // SEO: descrição usada nos mecanismos de busca e compartilhamentos.\n  seoDescription: "Conheça nossos serviços, veja nossos resultados e escolha seu próximo visual. Agende seu horário pelo WhatsApp.",
-  // IMAGEM DE COMPARTILHAMENTO: usada quando o link for compartilhado em redes sociais.\n  ogImage: "recursos/identidade/logo.svg",
-  // SOBRE: título e textos da seção que apresenta a experiência da barbearia.\n  sobre: {
+  // DESCRIÇÃO: frase principal apresentada no topo do site.
+  descricao: "Seu visual, seu estilo, sua melhor versão. Um atendimento pensado para você sair satisfeito e voltar quando quiser.",
+  // TÍTULO PRINCIPAL: chamada de destaque da capa.
+  heroTitle: "Seu próximo visual começa aqui.",
+  // SEO: título usado no navegador e nos mecanismos de busca.
+  seoTitle: "Barbearia Básico | Seu próximo visual começa aqui.",
+  // SEO: descrição usada nos mecanismos de busca e compartilhamentos.
+  seoDescription: "Conheça nossos serviços, veja nossos resultados e escolha seu próximo visual. Agende seu horário pelo WhatsApp.",
+  // IMAGEM DE COMPARTILHAMENTO: usada quando o link for compartilhado em redes sociais.
+  ogImage: "recursos/identidade/logo.svg",
+  // SOBRE: título e textos da seção que apresenta a experiência da barbearia.
+  sobre: {
     titulo: "Mais do que cuidar do visual, é cuidar de você.",
     textos: [
       "Um espaço para quem valoriza um bom visual, gosta de se cuidar e quer se sentir bem com o resultado.",
       "Cada atendimento é uma oportunidade de renovar a aparência, elevar a confiança e sair pronto para a próxima."
     ]
   },
-  // DIFERENCIAIS: benefícios que ajudam a apresentar o serviço ao visitante.\n  diferenciais: [
+  // DIFERENCIAIS: benefícios que ajudam a apresentar o serviço ao visitante.
+  diferenciais: [
     { titulo: "Seu estilo em primeiro lugar", descricao: "O serviço é adaptado para valorizar o visual que combina com você." },
     { titulo: "Detalhes que fazem diferença", descricao: "Do primeiro toque ao acabamento, cada detalhe contribui para um resultado bem cuidado." },
     { titulo: "Agendamento simples", descricao: "Escolha seu serviço, encontre um horário e envie seu pedido pelo WhatsApp." }
   ],
-  // CTA: chamada final para incentivar o visitante a agendar.\n  ctaTitulo: "Seu próximo visual pode começar agora.",
+  // CTA: chamada final para incentivar o visitante a agendar.
+  ctaTitulo: "Seu próximo visual pode começar agora.",
   ctaDescricao: "Escolha o serviço que você procura e reserve alguns minutos para cuidar do seu visual.",
-  // LOCALIZAÇÃO: título e descrição da área de endereço e contato.\n  localTitulo: "Venha viver a experiência.",
+  // LOCALIZAÇÃO: título e descrição da área de endereço e contato.
+  localTitulo: "Venha viver a experiência.",
   localDescricao: "Confira onde estamos, nossos horários e escolha o melhor momento para sua próxima visita.",
-  // RODAPÉ: textos exibidos no final da página.\n  footer: {
+  // RODAPÉ: textos exibidos no final da página.
+  footer: {
     texto: "Todos os direitos reservados.",
     credito: "Desenvolvido com profissionalismo.",
     creditoUrl: ""
   },
 
-  // CAPA: imagem principal do topo.\n  // O template usa esta foto de demonstração até você colocar a foto do cliente.\n  // Para um cliente real, coloque a foto em recursos/imagens/capa/hero.jpg\n  // e troque o valor abaixo para: "recursos/imagens/capa/hero.jpg".\n  heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
-  // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.\n  whatsapp: "5500000000000",
-  // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.\n  whatsappMensagem: "Olá! Gostaria de agendar meu próximo horário na barbearia.",
-  // INSTAGRAM: @ da barbearia exibido no contato.\n  instagram: "@barbearia",
-  // LINK DO INSTAGRAM: endereço completo do perfil.\n  instagramUrl: "https://instagram.com/",
-  // ENDEREÇO: endereço que será mostrado no site.\n  endereco: "Rua Exemplo, 123 — Centro",
-  // GOOGLE MAPS: cole aqui o link exato do local da barbearia.\n  mapaUrl: "https://maps.google.com/",
-  // HORÁRIOS: 0=domingo, 1=segunda ... 6=sábado.\n  // Use null quando a barbearia estiver fechada.\n  // Esses horários alimentam tanto a seção de contato quanto o agendamento.\n  funcionamento: {
+  // CAPA: imagem principal do topo.
+  // O template usa esta foto de demonstração até você colocar a foto do cliente.
+  // Para um cliente real, coloque a foto em recursos/imagens/capa/hero.jpg
+  // e troque o valor abaixo para: "recursos/imagens/capa/hero.jpg".
+  heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
+  // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.
+  whatsapp: "5500000000000",
+  // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.
+  whatsappMensagem: "Olá! Gostaria de agendar meu próximo horário na barbearia.",
+  // INSTAGRAM: @ da barbearia exibido no contato.
+  instagram: "@barbearia",
+  // LINK DO INSTAGRAM: endereço completo do perfil.
+  instagramUrl: "https://instagram.com/",
+  // ENDEREÇO: endereço que será mostrado no site.
+  endereco: "Rua Exemplo, 123 — Centro",
+  // GOOGLE MAPS: cole aqui o link exato do local da barbearia.
+  mapaUrl: "https://maps.google.com/",
+  // HORÁRIOS: 0=domingo, 1=segunda ... 6=sábado.
+  // Use null quando a barbearia estiver fechada.
+  // Esses horários alimentam tanto a seção de contato quanto o agendamento.
+  funcionamento: {
     0: null,
     1: { abertura: "09:00", fechamento: "19:00" },
     2: { abertura: "09:00", fechamento: "19:00" },
@@ -57,7 +80,9 @@ const CONFIG = {
     6: { abertura: "09:00", fechamento: "19:00" }
   },
 
-  // SERVIÇOS: altere nome, descrição, preço e duração de cada serviço.\n  // A duração é usada para calcular os horários do agendamento.\n  servicos: [
+  // SERVIÇOS: altere nome, descrição, preço e duração de cada serviço.
+  // A duração é usada para calcular os horários do agendamento.
+  servicos: [
     {
       nome: "Corte Masculino",
       descricao: "Corte personalizado de acordo com seu estilo.",
@@ -90,7 +115,8 @@ const CONFIG = {
     }
   ],
 
-  // GALERIA: troque src pelas fotos autorizadas do cliente e alt pela descrição da imagem.\n  galeria: [
+  // GALERIA: troque src pelas fotos autorizadas do cliente e alt pela descrição da imagem.
+  galeria: [
     { src: "https://images.pexels.com/photos/4422101/pexels-photo-4422101.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro realizando corte masculino" },
     { src: "https://images.pexels.com/photos/5584458/pexels-photo-5584458.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
     { src: "https://images.pexels.com/photos/2076930/pexels-photo-2076930.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbearia com atendimento profissional" },
