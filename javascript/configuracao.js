@@ -48,7 +48,28 @@ const CONFIG = {
     texto: "Todos os direitos reservados.",
     credito: "Desenvolvido por Alair Soares",
     // LINK DO DESENVOLVEDOR: altere aqui quando quiser apontar para outro site.
-    creditoUrl: "https://alair-info.vercel.app/"
+    creditoUrl: "https://alair-info.vercel.app/",
+    // JURÍDICO: textos e identificação do estabelecimento podem ser personalizados aqui.
+    juridico: {
+      habilitado: true,
+      responsavel: "",
+      cnpj: "",
+      termos: {
+        titulo: "Termos de Uso",
+        texto: "Este site apresenta informações, serviços e canais de contato do estabelecimento. O uso das informações e dos serviços deve respeitar as condições e orientações fornecidas pelo próprio estabelecimento. Os dados exibidos neste template são de responsabilidade do estabelecimento que utiliza o site.\n\nAntes da publicação definitiva, recomenda-se revisar este texto e adequá-lo às atividades, condições comerciais e obrigações legais do estabelecimento.",
+        url: "#termos"
+      },
+      privacidade: {
+        titulo: "Política de Privacidade",
+        texto: "Este site pode receber dados fornecidos voluntariamente pelo visitante, como nome e informações necessárias para solicitar um atendimento. Esses dados devem ser utilizados somente para as finalidades informadas ao visitante e conforme as regras aplicáveis de proteção de dados.\n\nAntes da publicação definitiva, o responsável pelo estabelecimento deve revisar este texto, informar os tratamentos de dados efetivamente realizados e adequá-lo à legislação aplicável, incluindo a LGPD quando pertinente.",
+        url: "#privacidade"
+      },
+      avisoLegal: {
+        titulo: "Aviso Legal",
+        texto: "As informações, preços, horários, serviços, imagens e demais conteúdos deste site devem ser mantidos atualizados pelo estabelecimento responsável. A contratação de serviços, disponibilidade de horários e condições de atendimento dependem das informações confirmadas pelo estabelecimento.\n\nO conteúdo jurídico deste template é uma base informativa e não substitui a análise de um profissional jurídico para a situação específica do estabelecimento.",
+        url: "#aviso-legal"
+      }
+    }
   },
 
   // CAPA: imagem principal do topo.
