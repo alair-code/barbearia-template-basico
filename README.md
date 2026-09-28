@@ -35,6 +35,15 @@ barbearia-basico/
 
 A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos comerciais, serviços, contatos, imagens e footer.
 
+### Cores globais do site
+
+As cores principais do template ficam centralizadas no início de estilos/style.css, dentro de :root:
+
+- --primary-color: cor primária, usada nos destaques, botões, links e elementos de identidade.
+- --secondary-color: cor secundária, usada como base das seções claras do layout.
+
+Para criar uma nova versão para um cliente, altere esses dois valores primeiro. O restante do CSS utiliza as variáveis globais, evitando a necessidade de procurar e substituir dezenas de códigos de cor.
+
 ### Nome, descrição e copy comercial
 
 A estrutura de textos do template foi pensada para apresentar o serviço de forma comercial, despertar interesse e conduzir o visitante até o agendamento. Ao criar um novo cliente, mantenha a estrutura da copy e personalize apenas os dados reais da barbearia, serviços, preços, imagens e identidade visual.
