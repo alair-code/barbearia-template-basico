@@ -1,33 +1,25 @@
 (() => {
   "use strict";
 
+  // ============================================================
+  // INICIALIZAÇÃO
+  // ============================================================
+  // O CONFIG vem de javascript/configuracao.js.
+  // Para personalizar o cliente, prefira alterar configuracao.js
+  // e o início de estilos/style.css, sem mexer nesta lógica.
   const config = CONFIG;
 
-  const root = document.documentElement;
-  if (config.cores) {
-    Object.entries({
-      "--accent": config.cores.principal,
-      "--bg": config.cores.fundo,
-      "--surface": config.cores.superficie,
-      "--surface-2": config.cores.superficieAlternativa,
-      "--text": config.cores.texto,
-      "--muted": config.cores.textoSuave
-    }).forEach(([property, value]) => {
-      if (value) root.style.setProperty(property, value);
-    });
-
-    const themeColor = document.querySelector('[data-meta-config="theme-color"]');
-    if (themeColor && config.cores.fundo) {
-      themeColor.setAttribute("content", config.cores.fundo);
-    }
-  }
-
-  if (config.seoTitle) {
+  // ============================================================
+  // SEO E IMAGEM PRINCIPAL
+  // ============================================================
+  // Atualiza título, descrição e imagem usados pelo navegador e
+  // pelos compartilhamentos sociais.
+  // TÍTULO SEO\n  // TÍTULO DO COMPARTILHAMENTO\n  if (config.seoTitle) {
     document.title = config.seoTitle;
     const titleMeta = document.querySelector('[data-meta-config="title"]');
     if (titleMeta) titleMeta.textContent = config.seoTitle;
   }
-  if (config.seoDescription) {
+  // DESCRIÇÃO SEO\n  if (config.seoDescription) {
     const descriptionMeta = document.querySelector('[data-meta-config="description"]');
     if (descriptionMeta) descriptionMeta.setAttribute("content", config.seoDescription);
     const ogDescription = document.querySelector('[data-meta-config="og:description"]');
@@ -37,16 +29,16 @@
     const ogTitle = document.querySelector('[data-meta-config="og:title"]');
     if (ogTitle) ogTitle.setAttribute("content", config.seoTitle);
   }
-  if (config.ogImage) {
+  // IMAGEM DO COMPARTILHAMENTO\n  if (config.ogImage) {
     const ogImage = document.querySelector('[data-meta-config="og:image"]');
     if (ogImage) ogImage.setAttribute("content", config.ogImage);
   }
 
-  if (config.heroImage) {
+  // IMAGEM DA CAPA\n  if (config.heroImage) {
     document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
   }
 
-  const whatsappNumber = String(config.whatsapp).replace(/\D/g, "");
+  // ============================================================\n  // AGENDAMENTO PELO WHATSAPP\n  // ============================================================\n  // Esta parte calcula horários conforme o dia, expediente e duração do serviço.\n  const whatsappNumber = String(config.whatsapp).replace(/\D/g, "");
   const bookingModal = document.querySelector("#booking-modal");
   const bookingForm = document.querySelector("#booking-form");
   const bookingName = document.querySelector("#booking-name");
@@ -57,38 +49,38 @@
   const bookingClose = document.querySelector(".booking-close");
   let activeBookingTrigger = null;
 
-  const todayIso = () => {
+  // Converte a data atual para YYYY-MM-DD usando o horário local.\n  const todayIso = () => {
     const now = new Date();
     const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     return local.toISOString().slice(0, 10);
   };
 
-  const minutesFromTime = (time) => {
+  // Converte "09:30" em minutos para facilitar os cálculos.\n  const minutesFromTime = (time) => {
     const [hours, minutes] = String(time).split(":").map(Number);
     return (hours * 60) + minutes;
   };
 
-  const formatDate = (isoDate) => {
+  // Formata a data para a mensagem enviada ao barbeiro.\n  const formatDate = (isoDate) => {
     const [year, month, day] = isoDate.split("-").map(Number);
     return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
       .format(new Date(year, month - 1, day));
   };
 
-  const getServiceDuration = () => {
+  // Lê a duração configurada no serviço selecionado.\n  const getServiceDuration = () => {
     if (!bookingService) return 30;
     const service = config.servicos?.find((item) => item.nome === bookingService.value);
     const match = String(service?.duracao || "").match(/\d+/);
     return match ? Number(match[0]) : 30;
   };
 
-  const getSchedule = (isoDate) => {
+  // Busca o horário de funcionamento correspondente à data escolhida.\n  const getSchedule = (isoDate) => {
     if (!isoDate) return null;
     const [year, month, day] = isoDate.split("-").map(Number);
     const date = new Date(year, month - 1, day);
     return config.funcionamento?.[date.getDay()] || null;
   };
 
-  const updateBookingTimes = () => {
+  // Recalcula a lista de horários sempre que serviço ou data mudar.\n  const updateBookingTimes = () => {
     if (!bookingDate || !bookingTime || !bookingStatus) return;
     const selectedDate = bookingDate.value;
     const schedule = getSchedule(selectedDate);
@@ -165,7 +157,7 @@
     bookingStatus.textContent = "Horários disponíveis: " + schedule.abertura + " às " + schedule.fechamento + ".";
   };
 
-  const openBooking = (trigger) => {
+  // Abre o formulário de agendamento e preenche os serviços disponíveis.\n  const openBooking = (trigger) => {
     if (!bookingModal) return;
     activeBookingTrigger = trigger || null;
     bookingModal.classList.add("is-open");
@@ -194,7 +186,7 @@
     bookingName?.focus();
   };
 
-  const closeBooking = () => {
+  // Fecha o formulário e devolve o foco ao botão que abriu a janela.\n  const closeBooking = () => {
     if (!bookingModal) return;
     bookingModal.classList.remove("is-open");
     bookingModal.setAttribute("aria-hidden", "true");
@@ -205,7 +197,7 @@
     }
   };
 
-  const trapFocus = (modal, event) => {
+  // Mantém a navegação pelo teclado dentro das janelas abertas.\n  const trapFocus = (modal, event) => {
     if (event.key !== "Tab" || !modal?.classList.contains("is-open")) return false;
     const focusable = Array.from(modal.querySelectorAll(
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -235,7 +227,7 @@
     });
   }
 
-  const isBookingSlotValid = (date, time, service) => {
+  // Confere novamente o horário antes de enviar, evitando seleções inválidas.\n  const isBookingSlotValid = (date, time, service) => {
     const schedule = getSchedule(date);
     if (!schedule || !service || !time) return false;
     const start = minutesFromTime(time);
@@ -252,7 +244,7 @@
     return start % 10 === 0;
   };
 
-  if (bookingForm) {
+  // Envia nome, serviço, data e horário para o WhatsApp.\n  if (bookingForm) {
     bookingForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const name = bookingName?.value.trim();
@@ -282,7 +274,7 @@
     });
   }
 
-  const setText = (key, value) => {
+  // ============================================================\n  // APLICAÇÃO DOS DADOS CONFIGURÁVEIS\n  // ============================================================\n  // Os elementos com data-config recebem os valores de configuracao.js.\n  const setText = (key, value) => {
     document.querySelectorAll('[data-config="' + key + '"]').forEach((element) => {
       element.textContent = value ?? "";
     });
@@ -319,13 +311,13 @@
   setText("horario", formatOperatingHours() || "Consulte os horários.");
   setText("whatsappDisplay", config.whatsapp);
 
-  const logo = document.querySelector(".brand img");
+  // LOGO E FAVICON\n  const logo = document.querySelector(".brand img");
   if (logo && config.logo) logo.src = config.logo;
 
   const favicon = document.querySelector('link[rel="icon"]');
   if (favicon && config.favicon) favicon.href = config.favicon;
 
-  const footer = config.footer || {};
+  // RODAPÉ\n  const footer = config.footer || {};
   const footerCopyright = document.querySelector("[data-footer=\"copyright\"]");
   const footerCredit = document.querySelector("[data-footer=\"credit\"]");
   if (footerCopyright) {
@@ -344,7 +336,7 @@
     }
   }
 
-  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
+  // LINKS DE WHATSAPP\n  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
     link.href = "#agendar";
     link.addEventListener("click", (event) => {
       event.preventDefault();
@@ -352,14 +344,14 @@
     });
   });
 
-  document.querySelectorAll("[data-instagram-link]").forEach((link) => {
+  // LINK DO INSTAGRAM\n  document.querySelectorAll("[data-instagram-link]").forEach((link) => {
     link.href = config.instagramUrl || "#";
   });
 
-  const mapLink = document.querySelector("[data-map-link]");
+  // LINK DO GOOGLE MAPS\n  const mapLink = document.querySelector("[data-map-link]");
   if (mapLink) mapLink.href = config.mapaUrl || "#";
 
-  const servicesList = document.querySelector("#services-list");
+  // ============================================================\n  // SERVIÇOS\n  // ============================================================\n  // Os cards são criados automaticamente a partir de CONFIG.servicos.\n  const servicesList = document.querySelector("#services-list");
   if (servicesList && Array.isArray(config.servicos)) {
     const fragment = document.createDocumentFragment();
     config.servicos.forEach((service) => {
@@ -395,7 +387,7 @@
     servicesList.replaceChildren(fragment);
   }
 
-  const galleryList = document.querySelector("#gallery-list");
+  // ============================================================\n  // GALERIA\n  // ============================================================\n  // As imagens vêm de CONFIG.galeria.\n  const galleryList = document.querySelector("#gallery-list");
   const galleryFallback = "recursos/imagens/galeria-01.svg";
   if (galleryList && Array.isArray(config.galeria)) {
     const fragment = document.createDocumentFragment();
@@ -425,7 +417,7 @@
     galleryList.replaceChildren(fragment);
   }
 
-  const aboutCopy = document.querySelector("#about-copy");
+  // TEXTO DA SEÇÃO SOBRE\n  const aboutCopy = document.querySelector("#about-copy");
   if (aboutCopy && Array.isArray(config.sobre?.textos)) {
     const fragment = document.createDocumentFragment();
     config.sobre.textos.forEach((paragraph) => {
@@ -436,7 +428,7 @@
     aboutCopy.replaceChildren(fragment);
   }
 
-  const differentialsList = document.querySelector("#differentials-list");
+  // DIFERENCIAIS\n  const differentialsList = document.querySelector("#differentials-list");
   if (differentialsList && Array.isArray(config.diferenciais)) {
     const fragment = document.createDocumentFragment();
     config.diferenciais.forEach((item, index) => {
@@ -459,7 +451,7 @@
     differentialsList.replaceChildren(fragment);
   }
 
-  const menuToggle = document.querySelector(".menu-toggle");
+  // ============================================================\n  // MENU RESPONSIVO\n  // ============================================================\n  const menuToggle = document.querySelector(".menu-toggle");
   const siteMenu = document.querySelector("#site-menu");
 
   const closeMenu = (restoreFocus = false) => {
@@ -478,7 +470,7 @@
 
   siteMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => closeMenu()));
 
-  const lightbox = document.querySelector("#lightbox");
+  // ============================================================\n  // GALERIA AMPLIADA (LIGHTBOX)\n  // ============================================================\n  const lightbox = document.querySelector("#lightbox");
   const lightboxImage = document.querySelector("#lightbox-image");
   const closeLightboxButton = document.querySelector(".lightbox-close");
   let activeGalleryTrigger = null;
@@ -521,7 +513,7 @@
     if (event.target === lightbox) closeLightbox();
   });
 
-  document.addEventListener("keydown", (event) => {
+  // TECLADO: ESC fecha janelas abertas e o menu; TAB permanece dentro das janelas.\n  document.addEventListener("keydown", (event) => {
     if (trapFocus(lightbox, event) || trapFocus(bookingModal, event)) return;
 
     if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
