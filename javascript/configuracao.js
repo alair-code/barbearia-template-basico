@@ -116,13 +116,14 @@ const CONFIG = {
     }
   ],
 
-  // GALERIA: troque src pelas fotos autorizadas do cliente e alt pela descrição da imagem.
-  galeria: [
-    { src: "https://images.pexels.com/photos/4422101/pexels-photo-4422101.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro realizando corte masculino" },
-    { src: "https://images.pexels.com/photos/5584458/pexels-photo-5584458.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
-    { src: "https://images.pexels.com/photos/2076930/pexels-photo-2076930.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbearia com atendimento profissional" },
-    { src: "https://images.pexels.com/photos/7697280/pexels-photo-7697280.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro trabalhando no corte" },
-    { src: "https://images.pexels.com/photos/7518731/pexels-photo-7518731.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Ferramentas e ambiente de barbearia" },
-    { src: "https://images.pexels.com/photos/4625639/pexels-photo-4625639.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Estilo masculino em barbearia" }
+  // GALERIA: coloque as fotos do cliente em recursos/imagens/galeria/.
+// Informe somente o caminho local da imagem e o texto alternativo.
+galeria: [
+    { src: "recursos/imagens/galeria/galeria-01.svg", alt: "Corte masculino" },
+    { src: "recursos/imagens/galeria/galeria-02.svg", alt: "Acabamento profissional" },
+    { src: "recursos/imagens/galeria/galeria-03.svg", alt: "Ambiente da barbearia" },
+    { src: "recursos/imagens/galeria/galeria-04.svg", alt: "Estilo masculino" },
+    { src: "recursos/imagens/galeria/galeria-05.svg", alt: "Serviço de barba" },
+    { src: "recursos/imagens/galeria/galeria-06.svg", alt: "Resultado do atendimento" }
   ]
 };
