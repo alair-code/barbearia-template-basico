@@ -36,6 +36,11 @@ const CONFIG = {
   ctaDescricao: "Chame no WhatsApp e combine seu próximo horário.",
   localTitulo: "Visite a barbearia",
   localDescricao: "Confira o endereço, horário de atendimento e como chegar.",
+  footer: {
+    texto: "Todos os direitos reservados.",
+    credito: "Desenvolvido com profissionalismo.",
+    creditoUrl: ""
+  },
 
   heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
   whatsapp: "5500000000000",
