@@ -55,7 +55,7 @@ const CONFIG = {
   // Informe SOMENTE o nome do arquivo aqui.
   // Exemplo: heroImage: "hero.jpg"
   // Também aceita uma URL completa (https://...).
-  heroImage: "hero.jpg",
+  heroImage: "hero.svg",
   // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.
   whatsapp: "5500000000000",
   // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.
