@@ -60,6 +60,18 @@ button { font: inherit; }
   background-size: cover;
   background-repeat: no-repeat;
 }
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  filter: saturate(.82) contrast(1.04);
+}
+
 .hero::before {
   content: "";
   position: absolute;
@@ -167,6 +179,7 @@ button { font: inherit; }
     min-height: 78vh;
     background-position: 62% center;
   }
+  .hero-video { display: none; }
   .hero-content { padding: 88px 0; }
   .hero h1 { font-size: clamp(3rem, 15vw, 5rem); }
   .section, .contact-section { padding: 72px 0; }
