@@ -163,3 +163,10 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Executar `npm run check`.
 - [ ] Revisar título, descrição, imagem de compartilhamento e cores.
 - [ ] Se possível, substituir imagens externas por arquivos locais autorizados.
+
+
+### Agendamento via WhatsApp
+
+O botão de agendamento abre um formulário para o cliente informar **nome, data e horário**. Os horários são gerados automaticamente a partir de `CONFIG.funcionamento`, respeitando o dia da semana, o horário de abertura/fechamento e o horário atual quando a data escolhida é hoje. Dias configurados como `null` ficam fechados e não exibem horários.
+
+A confirmação abre o WhatsApp com nome, data e horário escolhidos na mensagem para o barbeiro.
