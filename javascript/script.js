@@ -51,6 +51,7 @@
   const bookingForm = document.querySelector("#booking-form");
   const bookingName = document.querySelector("#booking-name");
   const bookingDate = document.querySelector("#booking-date");
+  const bookingService = document.querySelector("#booking-service");
   const bookingTime = document.querySelector("#booking-time");
   const bookingStatus = document.querySelector("#booking-status");
   const bookingClose = document.querySelector(".booking-close");
@@ -71,6 +72,13 @@
     const [year, month, day] = isoDate.split("-").map(Number);
     return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
       .format(new Date(year, month - 1, day));
+  };
+
+  const getServiceDuration = () => {
+    if (!bookingService) return 30;
+    const service = config.servicos?.find((item) => item.nome === bookingService.value);
+    const match = String(service?.duracao || "").match(/\d+/);
+    return match ? Number(match[0]) : 30;
   };
 
   const getSchedule = (isoDate) => {
@@ -102,14 +110,13 @@
 
     const opening = minutesFromTime(schedule.abertura);
     const closing = minutesFromTime(schedule.fechamento);
-    const [year, month, day] = selectedDate.split("-").map(Number);
     const selectedIsToday = selectedDate === todayIso();
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const serviceDuration = 30;
+    const serviceDuration = getServiceDuration();
     const slots = [];
 
-    for (let start = opening; start + serviceDuration <= closing; start += 30) {
+    for (let start = opening; start + serviceDuration <= closing; start += 10) {
       if (selectedIsToday && start <= currentMinutes) continue;
       const hours = String(Math.floor(start / 60)).padStart(2, "0");
       const minutes = String(start % 60).padStart(2, "0");
@@ -137,6 +144,14 @@
     bookingModal.classList.add("is-open");
     bookingModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("no-scroll");
+    if (bookingService) {
+      bookingService.innerHTML = '<option value="">Selecione um serviço</option>' +
+        (Array.isArray(config.servicos) ? config.servicos.map((service) =>
+          '<option value="' + service.nome.replace(/"/g, "&quot;") + '">' +
+          service.nome + (service.duracao ? " — " + service.duracao : "") +
+          '</option>'
+        ).join("") : "");
+    }
     if (bookingDate) {
       bookingDate.min = todayIso();
       if (!bookingDate.value || bookingDate.value < bookingDate.min) bookingDate.value = bookingDate.min;
@@ -157,6 +172,7 @@
   };
 
   if (bookingDate) bookingDate.addEventListener("change", updateBookingTimes);
+  if (bookingService) bookingService.addEventListener("change", updateBookingTimes);
   if (bookingClose) bookingClose.addEventListener("click", closeBooking);
   if (bookingModal) {
     bookingModal.addEventListener("click", (event) => {
@@ -170,14 +186,17 @@
       const name = bookingName?.value.trim();
       const date = bookingDate?.value;
       const time = bookingTime?.value;
+      const serviceName = bookingService?.value;
+      const service = config.servicos?.find((item) => item.nome === serviceName);
       const schedule = getSchedule(date);
 
-      if (!name || !date || !time || !schedule) return;
+      if (!name || !date || !time || !serviceName || !service || !schedule) return;
 
       const message = [
         config.whatsappMensagem || "Olá! Gostaria de agendar um horário na barbearia.",
         "",
         "Nome: " + name,
+        "Serviço: " + service.nome,
         "Data: " + formatDate(date),
         "Horário: " + time
       ].join("\n");
@@ -200,7 +219,29 @@
   setText("heroTitle", config.heroTitle);
   setText("instagram", config.instagram);
   setText("endereco", config.endereco);
-  setText("horario", config.horario);
+  const dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+  const formatOperatingHours = () => {
+    const groups = [];
+    Object.entries(config.funcionamento || {}).forEach(([day, schedule]) => {
+      if (!schedule) return;
+      const label = dayNames[Number(day)];
+      const value = label + ": " + schedule.abertura + " às " + schedule.fechamento;
+      const previous = groups[groups.length - 1];
+      if (previous && previous.schedule.abertura === schedule.abertura && previous.schedule.fechamento === schedule.fechamento &&
+          Number(previous.lastDay) + 1 === Number(day)) {
+        previous.lastDay = day;
+      } else {
+        groups.push({ firstDay: day, lastDay: day, schedule });
+      }
+    });
+    return groups.map((group) => {
+      const first = dayNames[Number(group.firstDay)];
+      const last = dayNames[Number(group.lastDay)];
+      const dayLabel = first === last ? first : first + " a " + last;
+      return dayLabel + ": " + group.schedule.abertura + " às " + group.schedule.fechamento;
+    }).join(" • ");
+  };
+  setText("horario", formatOperatingHours() || config.horario || "Consulte os horários.");
   setText("whatsappDisplay", config.whatsapp);
 
   const logo = document.querySelector(".brand img");
