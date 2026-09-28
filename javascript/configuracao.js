@@ -49,11 +49,11 @@ const CONFIG = {
   ],
 
   galeria: [
-    { src: "recursos/imagens/galeria-01.svg", alt: "Detalhe de corte masculino" },
-    { src: "recursos/imagens/galeria-02.svg", alt: "Ferramentas de barbearia" },
-    { src: "recursos/imagens/galeria-03.svg", alt: "Detalhe de acabamento" },
-    { src: "recursos/imagens/galeria-04.svg", alt: "Ambiente de barbearia" },
-    { src: "recursos/imagens/galeria-05.svg", alt: "Cuidado com a barba" },
-    { src: "recursos/imagens/galeria-06.svg", alt: "Estilo masculino" }
+    { src: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbeiro realizando corte masculino" },
+    { src: "https://images.unsplash.com/photo-1621605815971-fbc98d5d2ab6?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
+    { src: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbearia com atendimento profissional" },
+    { src: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbeiro trabalhando no corte" },
+    { src: "https://images.unsplash.com/photo-1512690459411-b0fd6e2e15e6?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Ferramentas e ambiente de barbearia" },
+    { src: "https://images.unsplash.com/photo-1534297635766-a262cdcb8ee4?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Estilo masculino em barbearia" }
   ]
 };
