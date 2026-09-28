@@ -434,7 +434,7 @@
   // ============================================================
   // As imagens vêm de CONFIG.galeria.
   const galleryList = document.querySelector("#gallery-list");
-  const galleryFallback = "recursos/imagens/galeria-01.svg";
+  const galleryFallback = "recursos/imagens/galeria/galeria-01.svg";
   if (galleryList && Array.isArray(config.galeria)) {
     const fragment = document.createDocumentFragment();
     config.galeria.forEach((image, index) => {
@@ -445,7 +445,11 @@
       button.setAttribute("aria-label", "Ampliar: " + (image.alt || "imagem"));
 
       const img = document.createElement("img");
-      img.src = image.src || galleryFallback;
+      const configuredImage = String(image?.src || "").trim();
+      const imagePath = /^(https?:|data:|file:|\/)/i.test(configuredImage)
+        ? configuredImage
+        : configuredImage;
+      img.src = imagePath || galleryFallback;
       img.alt = image.alt || "";
       img.loading = "lazy";
       img.decoding = "async";
