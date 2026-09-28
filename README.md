@@ -1,6 +1,6 @@
 # Barbearia Básico
 
-Template institucional estático para pequenas barbearias. A proposta é entregar uma presença profissional na internet com baixo custo de instalação e manutenção.
+Site institucional estático e reutilizável para pequenas barbearias. A proposta é entregar uma presença profissional na internet com baixo custo de instalação e manutenção, mantendo a estrutura simples para facilitar a personalização de cada cliente.
 
 ## Tecnologias
 
@@ -28,7 +28,17 @@ barbearia-basico/
     ├── identidade/
     │   ├── logo.svg
     │   └── favicon.svg
-    └── imagens/\n        ├── capa/\n        │   ├── hero.jpg\n        │   └── README.md\n        └── galeria/
+    └── imagens/
+        ├── capa/
+        │   ├── hero.svg
+        │   └── README.md
+        └── galeria/
+            ├── galeria-01.svg
+            ├── galeria-02.svg
+            ├── galeria-03.svg
+            ├── galeria-04.svg
+            ├── galeria-05.svg
+            └── galeria-06.svg
 ```
 
 ## Personalização rápida
@@ -37,7 +47,7 @@ A personalização principal fica em **`javascript/configuracao.js`**, incluindo
 
 ### Cores globais do site
 
-As cores principais do template ficam centralizadas no início de estilos/style.css, dentro de :root:
+As cores principais do site ficam centralizadas no início de estilos/style.css, dentro de :root:
 
 - --primary-color: cor primária, usada nos destaques, botões, links e elementos de identidade.
 - --secondary-color: cor secundária, usada como base das seções claras do layout.
@@ -94,7 +104,7 @@ Edite o array `servicos` para trocar nomes, descrições, preços e duração.
 
 ### Imagens
 
-As imagens da galeria são definidas no array `galeria` de **`javascript/configuracao.js`**. Para uma entrega comercial, prefira baixar as fotos autorizadas do cliente para **`recursos/imagens/`** e usar caminhos locais, por exemplo `recursos/imagens/galeria-01.jpg`. Isso evita dependências externas e melhora a previsibilidade do site.
+As imagens da galeria são definidas no array `galeria` de **`javascript/configuracao.js`**. Para uma entrega comercial, prefira usar fotos autorizadas do cliente como arquivos locais em **`recursos/imagens/galeria/`**, substituindo os arquivos de demonstração. Isso evita dependências externas e melhora a previsibilidade do site.
 
 As imagens da galeria carregam de forma lazy e possuem um SVG local de fallback caso uma imagem externa não esteja disponível.
 
