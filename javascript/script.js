@@ -59,7 +59,7 @@
   const galleryList = document.querySelector("#gallery-list");
   galleryList.innerHTML = config.galeria.map((image, index) => `
     <button class="gallery-item" type="button" data-gallery-index="${index}" aria-label="Ampliar: ${image.alt}">
-      <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async">
+      <img src="${image.src}" alt="${image.alt}" loading="eager" decoding="async" referrerpolicy="no-referrer">
     </button>
   `).join("");
 
