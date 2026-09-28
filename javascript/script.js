@@ -98,6 +98,14 @@
     </button>
   `).join("");
 
+  galleryList.querySelectorAll("img").forEach((image) => {
+    image.addEventListener("error", () => {
+      if (image.dataset.fallbackApplied) return;
+      image.dataset.fallbackApplied = "true";
+      image.src = "recursos/imagens/galeria-01.svg";
+    });
+  });
+
   const aboutCopy = document.querySelector("#about-copy");
   if (aboutCopy && Array.isArray(config.sobre?.textos)) {
     aboutCopy.innerHTML = config.sobre.textos.map((paragraph) => `<p>${paragraph}</p>`).join("");
