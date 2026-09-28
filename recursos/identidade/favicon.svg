@@ -1,5 +1,6 @@
-<!-- FAVICON PADRÃO: substitua este arquivo pelo ícone do cliente quando disponível. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Favicon da barbearia">
+  <!-- FUNDO: cor escura do ícone da aba. -->
   <rect width="64" height="64" rx="14" fill="#111"/>
+  <!-- MARCA: símbolo simples usado como favicon padrão do template. -->
   <path d="M18 18h28v8H18zm6 13h16v15H24z" fill="#c9a66b"/>
 </svg>
