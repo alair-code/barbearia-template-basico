@@ -108,6 +108,13 @@
       return;
     }
 
+    if (!bookingService?.value) {
+      bookingTime.disabled = true;
+      bookingTime.innerHTML = '<option value="">Selecione um serviço primeiro</option>';
+      bookingStatus.textContent = "Escolha o serviço para calcular os horários disponíveis.";
+      return;
+    }
+
     const opening = minutesFromTime(schedule.abertura);
     const closing = minutesFromTime(schedule.fechamento);
     const selectedIsToday = selectedDate === todayIso();
