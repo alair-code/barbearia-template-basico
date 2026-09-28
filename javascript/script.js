@@ -15,6 +15,11 @@
     }).forEach(([property, value]) => {
       if (value) root.style.setProperty(property, value);
     });
+
+    const themeColor = document.querySelector('[data-meta-config="theme-color"]');
+    if (themeColor && config.cores.fundo) {
+      themeColor.setAttribute("content", config.cores.fundo);
+    }
   }
 
   if (config.seoTitle) {
@@ -40,25 +45,17 @@
   if (config.heroImage) {
     document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
   }
+
   const whatsappUrl = "https://wa.me/" + String(config.whatsapp).replace(/\D/g, "") +
-    "?text=" + encodeURIComponent(config.whatsappMensagem);
+    "?text=" + encodeURIComponent(config.whatsappMensagem || "");
 
   const setText = (key, value) => {
     document.querySelectorAll('[data-config="' + key + '"]').forEach((element) => {
-      element.textContent = value;
+      element.textContent = value ?? "";
     });
   };
 
   setText("nome", config.nome);
-
-  const logo = document.querySelector(".brand img");
-  if (logo && config.logo) {
-    logo.src = config.logo;
-  }
-  const favicon = document.querySelector('link[rel="icon"]');
-  if (favicon && config.favicon) {
-    favicon.href = config.favicon;
-  }
   setText("descricao", config.descricao);
   setText("sobreTitulo", config.sobre?.titulo || "Mais do que um corte, uma experiência.");
   setText("heroTitle", config.heroTitle);
@@ -67,20 +64,29 @@
   setText("horario", config.horario);
   setText("whatsappDisplay", config.whatsapp);
 
+  const logo = document.querySelector(".brand img");
+  if (logo && config.logo) logo.src = config.logo;
+
+  const favicon = document.querySelector('link[rel="icon"]');
+  if (favicon && config.favicon) favicon.href = config.favicon;
+
   const footer = config.footer || {};
   const footerCopyright = document.querySelector("[data-footer=\"copyright\"]");
   const footerCredit = document.querySelector("[data-footer=\"credit\"]");
-  const footerCreditLink = document.querySelector("[data-footer=\"credit-link\"]");
   if (footerCopyright) {
     footerCopyright.textContent = footer.texto || "Todos os direitos reservados.";
   }
   if (footerCredit) {
     footerCredit.textContent = footer.credito || "";
     footerCredit.hidden = !footer.credito;
-  }
-  if (footerCreditLink) {
-    footerCreditLink.href = footer.creditoUrl || "#";
-    footerCreditLink.hidden = !footer.creditoUrl;
+    if (footer.creditoUrl) {
+      const link = document.createElement("a");
+      link.href = footer.creditoUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = footer.credito;
+      footerCredit.replaceWith(link);
+    }
   }
 
   document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
@@ -88,39 +94,44 @@
   });
 
   document.querySelectorAll("[data-instagram-link]").forEach((link) => {
-    link.href = config.instagramUrl;
+    link.href = config.instagramUrl || "#";
   });
 
   const mapLink = document.querySelector("[data-map-link]");
-  if (mapLink) mapLink.href = config.mapaUrl;
+  if (mapLink) mapLink.href = config.mapaUrl || "#";
 
   const servicesList = document.querySelector("#services-list");
-  servicesList.innerHTML = config.servicos.map((service) => `
-    <article class="service-card">
-      <div class="service-number" aria-hidden="true"></div>
-      <h3>${service.nome}</h3>
-      <p>${service.descricao}</p>
-      <div class="service-meta">
-        <strong>${service.preco}</strong>
-        ${service.duracao ? `<span>${service.duracao}</span>` : ""}
-      </div>
-    </article>
-  `).join("");
+  if (servicesList && Array.isArray(config.servicos)) {
+    servicesList.innerHTML = config.servicos.map((service) => `
+      <article class="service-card">
+        <div class="service-number" aria-hidden="true"></div>
+        <h3>${service.nome}</h3>
+        <p>${service.descricao}</p>
+        <div class="service-meta">
+          <strong>${service.preco}</strong>
+          ${service.duracao ? `<span>${service.duracao}</span>` : ""}
+        </div>
+      </article>
+    `).join("");
+  }
 
   const galleryList = document.querySelector("#gallery-list");
-  galleryList.innerHTML = config.galeria.map((image, index) => `
-    <button class="gallery-item" type="button" data-gallery-index="${index}" aria-label="Ampliar: ${image.alt}">
-      <img src="${image.src}" alt="${image.alt}" loading="eager" decoding="async" referrerpolicy="no-referrer">
-    </button>
-  `).join("");
+  const galleryFallback = "recursos/imagens/galeria-01.svg";
+  if (galleryList && Array.isArray(config.galeria)) {
+    galleryList.innerHTML = config.galeria.map((image, index) => `
+      <button class="gallery-item" type="button" data-gallery-index="${index}" aria-label="Ampliar: ${image.alt}">
+        <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+      </button>
+    `).join("");
 
-  galleryList.querySelectorAll("img").forEach((image) => {
-    image.addEventListener("error", () => {
-      if (image.dataset.fallbackApplied) return;
-      image.dataset.fallbackApplied = "true";
-      image.src = "recursos/imagens/galeria-01.svg";
+    galleryList.querySelectorAll("img").forEach((image) => {
+      image.addEventListener("error", () => {
+        if (image.dataset.fallbackApplied) return;
+        image.dataset.fallbackApplied = "true";
+        image.src = galleryFallback;
+      });
     });
-  });
+  }
 
   const aboutCopy = document.querySelector("#about-copy");
   if (aboutCopy && Array.isArray(config.sobre?.textos)) {
@@ -165,7 +176,7 @@
   const closeLightbox = () => {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
-    lightboxImage.src = "";
+    lightboxImage.removeAttribute("src");
     document.body.classList.remove("no-scroll");
     if (activeGalleryTrigger) {
       activeGalleryTrigger.focus();
@@ -173,20 +184,27 @@
     }
   };
 
-  galleryList.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-gallery-index]");
-    if (!button) return;
-    const image = config.galeria[Number(button.dataset.galleryIndex)];
-    if (!image) return;
+  if (galleryList && lightbox) {
+    galleryList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-gallery-index]");
+      if (!button) return;
+      const image = config.galeria[Number(button.dataset.galleryIndex)];
+      const thumbnail = button.querySelector("img");
+      if (!image) return;
 
-    activeGalleryTrigger = button;
-    lightboxImage.src = image.src;
-    lightboxImage.alt = image.alt;
-    lightbox.classList.add("is-open");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
-    closeLightboxButton.focus();
-  });
+      activeGalleryTrigger = button;
+      lightboxImage.src = thumbnail?.currentSrc || thumbnail?.src || image.src;
+      lightboxImage.alt = image.alt;
+      lightboxImage.onerror = () => {
+        lightboxImage.onerror = null;
+        lightboxImage.src = galleryFallback;
+      };
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("no-scroll");
+      closeLightboxButton.focus();
+    });
+  }
 
   closeLightboxButton.addEventListener("click", closeLightbox);
   lightbox.addEventListener("click", (event) => {
