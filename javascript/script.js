@@ -92,25 +92,34 @@
     if (!bookingDate || !bookingTime || !bookingStatus) return;
     const selectedDate = bookingDate.value;
     const schedule = getSchedule(selectedDate);
-    bookingTime.innerHTML = "";
+    bookingTime.replaceChildren();
 
     if (!selectedDate) {
       bookingTime.disabled = true;
-      bookingTime.innerHTML = '<option value="">Selecione uma data primeiro</option>';
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Selecione uma data primeiro";
+      bookingTime.appendChild(option);
       bookingStatus.textContent = "Selecione uma data para ver os horários disponíveis.";
       return;
     }
 
     if (!schedule) {
       bookingTime.disabled = true;
-      bookingTime.innerHTML = '<option value="">Barbearia fechada neste dia</option>';
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Barbearia fechada neste dia";
+      bookingTime.appendChild(option);
       bookingStatus.textContent = "A barbearia não funciona nesta data. Escolha outro dia.";
       return;
     }
 
     if (!bookingService?.value) {
       bookingTime.disabled = true;
-      bookingTime.innerHTML = '<option value="">Selecione um serviço primeiro</option>';
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Selecione um serviço primeiro";
+      bookingTime.appendChild(option);
       bookingStatus.textContent = "Escolha o serviço para calcular os horários disponíveis.";
       return;
     }
@@ -132,7 +141,10 @@
 
     if (!slots.length) {
       bookingTime.disabled = true;
-      bookingTime.innerHTML = '<option value="">Nenhum horário disponível</option>';
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Nenhum horário disponível";
+      bookingTime.appendChild(option);
       bookingStatus.textContent = selectedIsToday
         ? "Não há mais horários disponíveis hoje."
         : "Não há horários disponíveis nesta data.";
@@ -140,8 +152,16 @@
     }
 
     bookingTime.disabled = false;
-    bookingTime.innerHTML = '<option value="">Selecione um horário</option>' +
-      slots.map((slot) => '<option value="' + slot + '">' + slot + '</option>').join("");
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Selecione um horário";
+    bookingTime.appendChild(placeholder);
+    slots.forEach((slot) => {
+      const option = document.createElement("option");
+      option.value = slot;
+      option.textContent = slot;
+      bookingTime.appendChild(option);
+    });
     bookingStatus.textContent = "Horários disponíveis: " + schedule.abertura + " às " + schedule.fechamento + ".";
   };
 
@@ -152,12 +172,19 @@
     bookingModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("no-scroll");
     if (bookingService) {
-      bookingService.innerHTML = '<option value="">Selecione um serviço</option>' +
-        (Array.isArray(config.servicos) ? config.servicos.map((service) =>
-          '<option value="' + service.nome.replace(/"/g, "&quot;") + '">' +
-          service.nome + (service.duracao ? " — " + service.duracao : "") +
-          '</option>'
-        ).join("") : "");
+      bookingService.replaceChildren();
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "Selecione um serviço";
+      bookingService.appendChild(placeholder);
+      if (Array.isArray(config.servicos)) {
+        config.servicos.forEach((service) => {
+          const option = document.createElement("option");
+          option.value = service.nome;
+          option.textContent = service.nome + (service.duracao ? " — " + service.duracao : "");
+          bookingService.appendChild(option);
+        });
+      }
     }
     if (bookingDate) {
       bookingDate.min = todayIso();
@@ -178,6 +205,27 @@
     }
   };
 
+  const trapFocus = (modal, event) => {
+    if (event.key !== "Tab" || !modal?.classList.contains("is-open")) return false;
+    const focusable = Array.from(modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter((element) => !element.hasAttribute("hidden") && element.getAttribute("aria-hidden") !== "true");
+    if (!focusable.length) return false;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+      return true;
+    }
+    if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+      return true;
+    }
+    return false;
+  };
+
   if (bookingDate) bookingDate.addEventListener("change", updateBookingTimes);
   if (bookingService) bookingService.addEventListener("change", updateBookingTimes);
   if (bookingClose) bookingClose.addEventListener("click", closeBooking);
@@ -186,6 +234,23 @@
       if (event.target === bookingModal) closeBooking();
     });
   }
+
+  const isBookingSlotValid = (date, time, service) => {
+    const schedule = getSchedule(date);
+    if (!schedule || !service || !time) return false;
+    const start = minutesFromTime(time);
+    const opening = minutesFromTime(schedule.abertura);
+    const closing = minutesFromTime(schedule.fechamento);
+    const match = String(service.duracao || "").match(/\d+/);
+    const duration = match ? Number(match[0]) : 30;
+    if (!Number.isFinite(start) || !Number.isFinite(duration)) return false;
+    if (start < opening || start + duration > closing) return false;
+    if (date === todayIso()) {
+      const now = new Date();
+      if (start <= now.getHours() * 60 + now.getMinutes()) return false;
+    }
+    return start % 10 === 0;
+  };
 
   if (bookingForm) {
     bookingForm.addEventListener("submit", (event) => {
@@ -197,7 +262,10 @@
       const service = config.servicos?.find((item) => item.nome === serviceName);
       const schedule = getSchedule(date);
 
-      if (!name || !date || !time || !serviceName || !service || !schedule) return;
+      if (!name || !date || !time || !serviceName || !service || !schedule || date < todayIso() || !isBookingSlotValid(date, time, service)) {
+        bookingStatus.textContent = "Revise o serviço, a data e o horário selecionados.";
+        return;
+      }
 
       const message = [
         config.whatsappMensagem || "Olá! Gostaria de agendar um horário na barbearia.",
@@ -293,51 +361,102 @@
 
   const servicesList = document.querySelector("#services-list");
   if (servicesList && Array.isArray(config.servicos)) {
-    servicesList.innerHTML = config.servicos.map((service) => `
-      <article class="service-card">
-        <div class="service-number" aria-hidden="true"></div>
-        <h3>${service.nome}</h3>
-        <p>${service.descricao}</p>
-        <div class="service-meta">
-          <strong>${service.preco}</strong>
-          ${service.duracao ? `<span>${service.duracao}</span>` : ""}
-        </div>
-      </article>
-    `).join("");
+    const fragment = document.createDocumentFragment();
+    config.servicos.forEach((service) => {
+      const article = document.createElement("article");
+      article.className = "service-card";
+
+      const number = document.createElement("div");
+      number.className = "service-number";
+      number.setAttribute("aria-hidden", "true");
+
+      const title = document.createElement("h3");
+      title.textContent = service.nome || "";
+
+      const description = document.createElement("p");
+      description.textContent = service.descricao || "";
+
+      const meta = document.createElement("div");
+      meta.className = "service-meta";
+
+      const price = document.createElement("strong");
+      price.textContent = service.preco || "";
+
+      meta.appendChild(price);
+      if (service.duracao) {
+        const duration = document.createElement("span");
+        duration.textContent = service.duracao;
+        meta.appendChild(duration);
+      }
+
+      article.append(number, title, description, meta);
+      fragment.appendChild(article);
+    });
+    servicesList.replaceChildren(fragment);
   }
 
   const galleryList = document.querySelector("#gallery-list");
   const galleryFallback = "recursos/imagens/galeria-01.svg";
   if (galleryList && Array.isArray(config.galeria)) {
-    galleryList.innerHTML = config.galeria.map((image, index) => `
-      <button class="gallery-item" type="button" data-gallery-index="${index}" aria-label="Ampliar: ${image.alt}">
-        <img src="${image.src}" alt="${image.alt}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
-      </button>
-    `).join("");
+    const fragment = document.createDocumentFragment();
+    config.galeria.forEach((image, index) => {
+      const button = document.createElement("button");
+      button.className = "gallery-item";
+      button.type = "button";
+      button.dataset.galleryIndex = String(index);
+      button.setAttribute("aria-label", "Ampliar: " + (image.alt || "imagem"));
 
-    galleryList.querySelectorAll("img").forEach((image) => {
-      image.addEventListener("error", () => {
-        if (image.dataset.fallbackApplied) return;
-        image.dataset.fallbackApplied = "true";
-        image.src = galleryFallback;
+      const img = document.createElement("img");
+      img.src = image.src || galleryFallback;
+      img.alt = image.alt || "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+
+      button.appendChild(img);
+      fragment.appendChild(button);
+
+      img.addEventListener("error", () => {
+        if (img.dataset.fallbackApplied) return;
+        img.dataset.fallbackApplied = "true";
+        img.src = galleryFallback;
       });
     });
+    galleryList.replaceChildren(fragment);
   }
 
   const aboutCopy = document.querySelector("#about-copy");
   if (aboutCopy && Array.isArray(config.sobre?.textos)) {
-    aboutCopy.innerHTML = config.sobre.textos.map((paragraph) => `<p>${paragraph}</p>`).join("");
+    const fragment = document.createDocumentFragment();
+    config.sobre.textos.forEach((paragraph) => {
+      const element = document.createElement("p");
+      element.textContent = paragraph || "";
+      fragment.appendChild(element);
+    });
+    aboutCopy.replaceChildren(fragment);
   }
 
   const differentialsList = document.querySelector("#differentials-list");
   if (differentialsList && Array.isArray(config.diferenciais)) {
-    differentialsList.innerHTML = config.diferenciais.map((item, index) => `
-      <article class="differential-card">
-        <span class="differential-index">0${index + 1}</span>
-        <h3>${item.titulo}</h3>
-        <p>${item.descricao}</p>
-      </article>
-    `).join("");
+    const fragment = document.createDocumentFragment();
+    config.diferenciais.forEach((item, index) => {
+      const article = document.createElement("article");
+      article.className = "differential-card";
+
+      const number = document.createElement("span");
+      number.className = "differential-index";
+      number.textContent = String(index + 1).padStart(2, "0");
+
+      const title = document.createElement("h3");
+      title.textContent = item.titulo || "";
+
+      const description = document.createElement("p");
+      description.textContent = item.descricao || "";
+
+      article.append(number, title, description);
+      fragment.appendChild(article);
+    });
+    differentialsList.replaceChildren(fragment);
   }
 
   const menuToggle = document.querySelector(".menu-toggle");
@@ -403,6 +522,8 @@
   });
 
   document.addEventListener("keydown", (event) => {
+    if (trapFocus(lightbox, event) || trapFocus(bookingModal, event)) return;
+
     if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
       closeLightbox();
       return;
