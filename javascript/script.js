@@ -103,12 +103,44 @@
     return config.funcionamento?.[date.getDay()] || null;
   };
 
+  // Procura o próximo dia em que a barbearia funciona.
+  const findNextOpenDate = (fromDate) => {
+    if (!fromDate) return null;
+    const [year, month, day] = fromDate.split("-").map(Number);
+    const cursor = new Date(year, month - 1, day);
+    for (let offset = 1; offset <= 31; offset += 1) {
+      cursor.setDate(cursor.getDate() + 1);
+      const iso = [cursor.getFullYear(), String(cursor.getMonth() + 1).padStart(2, "0"), String(cursor.getDate()).padStart(2, "0")].join("-");
+      if (getSchedule(iso)) return iso;
+    }
+    return null;
+  };
+
+  // Mostra uma ação clara para continuar o agendamento em outro dia.
+  const showNextDateOption = (fromDate) => {
+    const existing = bookingStatus?.parentElement?.querySelector(".booking-next-day");
+    existing?.remove();
+    const nextDate = findNextOpenDate(fromDate);
+    if (!bookingStatus || !nextDate) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "booking-next-day";
+    button.textContent = "Ver próximo dia disponível";
+    button.addEventListener("click", () => {
+      bookingDate.value = nextDate;
+      updateBookingTimes();
+      bookingDate.focus();
+    });
+    bookingStatus.insertAdjacentElement("afterend", button);
+  };
+
   // Recalcula a lista de horários sempre que serviço ou data mudar.
   const updateBookingTimes = () => {
     if (!bookingDate || !bookingTime || !bookingStatus) return;
     const selectedDate = bookingDate.value;
     const schedule = getSchedule(selectedDate);
     bookingTime.replaceChildren();
+    bookingStatus.parentElement?.querySelector(".booking-next-day")?.remove();
 
     if (!selectedDate) {
       bookingTime.disabled = true;
@@ -127,6 +159,7 @@
       option.textContent = "Barbearia fechada neste dia";
       bookingTime.appendChild(option);
       bookingStatus.textContent = "A barbearia não funciona nesta data. Escolha outro dia.";
+      showNextDateOption(selectedDate);
       return;
     }
 
@@ -162,8 +195,9 @@
       option.textContent = "Nenhum horário disponível";
       bookingTime.appendChild(option);
       bookingStatus.textContent = selectedIsToday
-        ? "Não há mais horários disponíveis hoje."
-        : "Não há horários disponíveis nesta data.";
+        ? "Não há mais horários disponíveis hoje. Escolha outra data para agendar."
+        : "Não há horários disponíveis nesta data. Escolha outra data para agendar.";
+      showNextDateOption(selectedDate);
       return;
     }
 
