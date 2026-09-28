@@ -39,13 +39,16 @@
   }
 
   // IMAGEM DA CAPA
-  // Se for apenas o nome do arquivo, procura automaticamente em recursos/imagens/capa/.
-  // Se for uma URL ou caminho absoluto, usa o valor informado.
+  // Resolve o caminho a partir da pasta do site (document.baseURI).
+  // Isso evita que o navegador interprete a imagem como se estivesse
+  // dentro de estilos/ quando a variável CSS for aplicada.
   if (config.heroImage) {
-    const heroImage = /^(https?:|data:|\/)/i.test(config.heroImage)
-      ? config.heroImage
-      : "recursos/imagens/capa/" + config.heroImage.replace(/^\.\//, "");
-    const safeHeroImage = heroImage.replace(/"/g, '\\"');
+    const configuredHero = String(config.heroImage).trim();
+    const heroImage = /^(https?:|data:|file:|\/)/i.test(configuredHero)
+      ? configuredHero
+      : "recursos/imagens/capa/" + configuredHero.replace(/^\.\//, "");
+    const resolvedHeroImage = new URL(heroImage, document.baseURI).href;
+    const safeHeroImage = resolvedHeroImage.replace(/"/g, '\\"');
     document.documentElement.style.setProperty("--hero-image", 'url("' + safeHeroImage + '")');
   }
 
