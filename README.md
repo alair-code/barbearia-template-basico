@@ -33,7 +33,7 @@ barbearia-basico/
 
 ## Personalização rápida
 
-A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos comerciais, serviços, contatos, imagens e footer.
+A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, textos comerciais, serviços, contatos, imagens, horários e footer. As cores globais ficam no início de **`estilos/style.css`**.
 
 ### Cores globais do site
 
@@ -50,13 +50,7 @@ A estrutura de textos do template foi pensada para apresentar o serviço de form
 
 Os principais textos ficam em `CONFIG`, permitindo reutilizar a mesma estratégia de comunicação em diferentes barbearias sem alterar o HTML.
 
-Altere:
-
-```js
-nome: "Barbearia Básico",
-descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
-heroTitle: "Seu estilo começa aqui.",
-```
+Altere os campos indicados pelos comentários dentro de `CONFIG`. Eles mostram de forma simples o que cada informação controla e onde ela aparece no site.
 
 ### WhatsApp
 
@@ -108,12 +102,12 @@ As imagens da galeria carregam de forma lazy e possuem um SVG local de fallback 
 
 - `recursos/identidade/logo.svg`
 - `recursos/identidade/favicon.svg`
-- Cores principais em `CONFIG.cores`
+- Cores globais no início de `estilos/style.css` (`--primary-color` e `--secondary-color`)
 - Imagem da capa em `CONFIG.heroImage`
 - Imagem de compartilhamento em `CONFIG.ogImage`
 - `estilos/style.css`
 
-A cor do tema do navegador também acompanha `CONFIG.cores.fundo`.
+A cor do tema do navegador usa o fundo definido pelo layout. Se quiser alterar o fundo geral, procure a variável `--bg` no início do CSS.
 
 ## Executar localmente
 
@@ -188,3 +182,27 @@ A confirmação abre o WhatsApp com nome, serviço, data e horário escolhidos n
 ### Funcionamento do agendamento
 
 Configure os horários por dia em `CONFIG.funcionamento`. Use `null` para dias fechados. O cliente precisa escolher o serviço, e a duração configurada em `CONFIG.servicos[].duracao` é usada para garantir que o horário de início caiba dentro do expediente. Os horários são oferecidos em intervalos de 10 minutos e, para a data atual, horários já iniciados não aparecem.
+
+
+## Comentários de configuração
+
+O template foi documentado para facilitar a reutilização por quem não quer procurar cada configuração no código.
+
+- **javascript/configuracao.js**: comentários indicam o que deve ser alterado para cada cliente.
+- **estilos/style.css**: comentários indicam as áreas do layout e, principalmente, onde trocar as cores globais.
+- **index.html**: comentários identificam cada seção e explicam quando a alteração deve ser feita no arquivo de configuração.
+- **javascript/script.js**: comentários explicam cada bloco de funcionamento, como agendamento, WhatsApp, menu, galeria e aplicação dos dados.
+- **404.html**: comentários explicam a página de erro.
+- **Arquivos SVG**: comentários identificam a finalidade de cada arquivo. As cores internas de um SVG são próprias do desenho e podem ser alteradas no próprio arquivo quando a identidade da logo também precisar mudar.
+- **package.json**: é JSON puro e não aceita comentários. A explicação do comando disponível fica neste README.
+
+### Regra simples para criar um novo cliente
+
+1. Abra `javascript/configuracao.js`.
+2. Preencha os dados reais do cliente seguindo os comentários.
+3. Abra `estilos/style.css`.
+4. Troque `--primary-color` e `--secondary-color`.
+5. Substitua logo, favicon e fotos.
+6. Revise serviços, preços, horários, WhatsApp, Instagram, endereço e Google Maps.
+7. Execute `npm run check`.
+8. Teste o site antes de publicar.
