@@ -46,8 +46,147 @@
     document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
   }
 
-  const whatsappUrl = "https://wa.me/" + String(config.whatsapp).replace(/\D/g, "") +
-    "?text=" + encodeURIComponent(config.whatsappMensagem || "");
+  const whatsappNumber = String(config.whatsapp).replace(/\D/g, "");
+  const bookingModal = document.querySelector("#booking-modal");
+  const bookingForm = document.querySelector("#booking-form");
+  const bookingName = document.querySelector("#booking-name");
+  const bookingDate = document.querySelector("#booking-date");
+  const bookingTime = document.querySelector("#booking-time");
+  const bookingStatus = document.querySelector("#booking-status");
+  const bookingClose = document.querySelector(".booking-close");
+  let activeBookingTrigger = null;
+
+  const todayIso = () => {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  };
+
+  const minutesFromTime = (time) => {
+    const [hours, minutes] = String(time).split(":").map(Number);
+    return (hours * 60) + minutes;
+  };
+
+  const formatDate = (isoDate) => {
+    const [year, month, day] = isoDate.split("-").map(Number);
+    return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
+      .format(new Date(year, month - 1, day));
+  };
+
+  const getSchedule = (isoDate) => {
+    if (!isoDate) return null;
+    const [year, month, day] = isoDate.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return config.funcionamento?.[date.getDay()] || null;
+  };
+
+  const updateBookingTimes = () => {
+    if (!bookingDate || !bookingTime || !bookingStatus) return;
+    const selectedDate = bookingDate.value;
+    const schedule = getSchedule(selectedDate);
+    bookingTime.innerHTML = "";
+
+    if (!selectedDate) {
+      bookingTime.disabled = true;
+      bookingTime.innerHTML = '<option value="">Selecione uma data primeiro</option>';
+      bookingStatus.textContent = "Selecione uma data para ver os horários disponíveis.";
+      return;
+    }
+
+    if (!schedule) {
+      bookingTime.disabled = true;
+      bookingTime.innerHTML = '<option value="">Barbearia fechada neste dia</option>';
+      bookingStatus.textContent = "A barbearia não funciona nesta data. Escolha outro dia.";
+      return;
+    }
+
+    const opening = minutesFromTime(schedule.abertura);
+    const closing = minutesFromTime(schedule.fechamento);
+    const [year, month, day] = selectedDate.split("-").map(Number);
+    const selectedIsToday = selectedDate === todayIso();
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const serviceDuration = 30;
+    const slots = [];
+
+    for (let start = opening; start + serviceDuration <= closing; start += 30) {
+      if (selectedIsToday && start <= currentMinutes) continue;
+      const hours = String(Math.floor(start / 60)).padStart(2, "0");
+      const minutes = String(start % 60).padStart(2, "0");
+      slots.push(hours + ":" + minutes);
+    }
+
+    if (!slots.length) {
+      bookingTime.disabled = true;
+      bookingTime.innerHTML = '<option value="">Nenhum horário disponível</option>';
+      bookingStatus.textContent = selectedIsToday
+        ? "Não há mais horários disponíveis hoje."
+        : "Não há horários disponíveis nesta data.";
+      return;
+    }
+
+    bookingTime.disabled = false;
+    bookingTime.innerHTML = '<option value="">Selecione um horário</option>' +
+      slots.map((slot) => '<option value="' + slot + '">' + slot + '</option>').join("");
+    bookingStatus.textContent = "Horários disponíveis: " + schedule.abertura + " às " + schedule.fechamento + ".";
+  };
+
+  const openBooking = (trigger) => {
+    if (!bookingModal) return;
+    activeBookingTrigger = trigger || null;
+    bookingModal.classList.add("is-open");
+    bookingModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+    if (bookingDate) {
+      bookingDate.min = todayIso();
+      if (!bookingDate.value || bookingDate.value < bookingDate.min) bookingDate.value = bookingDate.min;
+      updateBookingTimes();
+    }
+    bookingName?.focus();
+  };
+
+  const closeBooking = () => {
+    if (!bookingModal) return;
+    bookingModal.classList.remove("is-open");
+    bookingModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("no-scroll");
+    if (activeBookingTrigger) {
+      activeBookingTrigger.focus();
+      activeBookingTrigger = null;
+    }
+  };
+
+  if (bookingDate) bookingDate.addEventListener("change", updateBookingTimes);
+  if (bookingClose) bookingClose.addEventListener("click", closeBooking);
+  if (bookingModal) {
+    bookingModal.addEventListener("click", (event) => {
+      if (event.target === bookingModal) closeBooking();
+    });
+  }
+
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = bookingName?.value.trim();
+      const date = bookingDate?.value;
+      const time = bookingTime?.value;
+      const schedule = getSchedule(date);
+
+      if (!name || !date || !time || !schedule) return;
+
+      const message = [
+        config.whatsappMensagem || "Olá! Gostaria de agendar um horário na barbearia.",
+        "",
+        "Nome: " + name,
+        "Data: " + formatDate(date),
+        "Horário: " + time
+      ].join("\n");
+
+      const whatsappUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+      closeBooking();
+    });
+  }
 
   const setText = (key, value) => {
     document.querySelectorAll('[data-config="' + key + '"]').forEach((element) => {
@@ -90,7 +229,11 @@
   }
 
   document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
-    link.href = whatsappUrl;
+    link.href = "#agendar";
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openBooking(link);
+    });
   });
 
   document.querySelectorAll("[data-instagram-link]").forEach((link) => {
@@ -214,6 +357,11 @@
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
       closeLightbox();
+      return;
+    }
+
+    if (event.key === "Escape" && bookingModal?.classList.contains("is-open")) {
+      closeBooking();
       return;
     }
 
