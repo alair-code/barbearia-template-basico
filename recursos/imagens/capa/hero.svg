@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Imagem padrão profissional para capa de barbearia">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#111"/><stop offset=".55" stop-color="#252525"/><stop offset="1" stop-color="#080808"/></linearGradient>
+  <radialGradient id="glow" cx="72%" cy="42%" r="55%"><stop offset="0" stop-color="#c9a66b" stop-opacity=".32"/><stop offset="1" stop-color="#c9a66b" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<rect width="1600" height="900" fill="url(#glow)"/>
+<path d="M1030 730c40-230 80-380 220-500 52 62 88 130 102 206-88 56-145 139-166 294z" fill="#171717" stroke="#c9a66b" stroke-opacity=".55" stroke-width="5"/>
+<circle cx="1190" cy="280" r="92" fill="#202020" stroke="#c9a66b" stroke-opacity=".7" stroke-width="5"/>
+<path d="M1065 560c80-65 184-84 292-20" fill="none" stroke="#c9a66b" stroke-opacity=".5" stroke-width="12" stroke-linecap="round"/>
+<path d="M0 760h1600" stroke="#c9a66b" stroke-opacity=".18" stroke-width="2"/>
+</svg>
