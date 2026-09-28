@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <!-- CONFIGURAÇÃO: os dados principais são preenchidos por javascript/configuracao.js. -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Barbearia profissional para quem valoriza estilo, cuidado e qualidade." data-meta-config="description">
@@ -16,6 +17,7 @@
 <body>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
+  <!-- CABEÇALHO: menu, logo e botão de agendamento. -->
   <header class="site-header" id="inicio">
     <div class="container header-inner">
       <a class="brand" href="#inicio" aria-label="Ir para o início">
@@ -39,7 +41,9 @@
     </div>
   </header>
 
+  <!-- CONTEÚDO PRINCIPAL DO SITE -->
   <main id="conteudo">
+    <!-- HERO: altere textos, logo e imagem principalmente em configuracao.js. -->
     <section class="hero">
       <div class="container hero-content">
         <p class="eyebrow">ESTILO • CUIDADO • CONFIANÇA</p>
@@ -52,6 +56,7 @@
       </div>
     </section>
 
+    <!-- DIFERENCIAIS RÁPIDOS: apresentação dos principais benefícios. -->
     <section class="trust-strip" aria-label="Diferenciais da barbearia">
       <div class="container trust-grid">
         <div><strong>ATENDIMENTO PERSONALIZADO</strong><span>Um visual pensado para você</span></div>
@@ -61,6 +66,7 @@
       </div>
     </section>
 
+    <!-- SOBRE: textos carregados de CONFIG.sobre. -->
     <section class="section section-light" id="sobre">
       <div class="container about-grid">
         <div>
@@ -71,6 +77,7 @@
       </div>
     </section>
 
+    <!-- SERVIÇOS: os cards são criados automaticamente por CONFIG.servicos. -->
     <section class="section section-dark" id="servicos">
       <div class="container">
         <div class="section-heading">
@@ -84,6 +91,7 @@
       </div>
     </section>
 
+    <!-- DIFERENCIAIS: conteúdo carregado de CONFIG.diferenciais. -->
     <section class="section section-light" id="diferenciais">
       <div class="container">
         <div class="section-heading">
@@ -97,6 +105,7 @@
       </div>
     </section>
 
+    <!-- AGENDAMENTO: botão abre o formulário e envia os dados para o WhatsApp. -->
     <section class="section section-dark section-cta" id="agendar">
       <div class="container cta-panel">
         <div>
@@ -108,6 +117,7 @@
       </div>
     </section>
 
+    <!-- GALERIA: imagens carregadas de CONFIG.galeria. -->
     <section class="section section-light" id="galeria">
       <div class="container">
         <div class="section-heading">
@@ -121,6 +131,7 @@
       </div>
     </section>
 
+    <!-- CONTATO: endereço, horário, Instagram, Maps e WhatsApp. -->
     <section class="contact-section" id="contato">
       <div class="container">
         <div class="location-heading">
@@ -147,6 +158,7 @@
     </section>
   </main>
 
+  <!-- RODAPÉ: textos configuráveis em CONFIG.footer. -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="current-year"></span> <span data-config="nome">Barbearia Básico</span> • <span data-footer="copyright">Todos os direitos reservados.</span></span>
@@ -154,6 +166,7 @@
     </div>
   </footer>
 
+  <!-- MODAL DE AGENDAMENTO: não altere a estrutura sem necessidade. -->
   <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" aria-hidden="true">
     <div class="booking-panel">
       <button class="booking-close" type="button" aria-label="Fechar agendamento">×</button>
@@ -186,17 +199,21 @@
     </div>
   </div>
 
+  <!-- LIGHTBOX: janela usada para ampliar as fotos da galeria. -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
     <span id="lightbox-title" class="sr-only">Visualização ampliada da imagem</span>
     <button class="lightbox-close" type="button" aria-label="Fechar imagem">×</button>
     <img id="lightbox-image" src="" alt="">
   </div>
 
+  <!-- WHATSAPP FLUTUANTE: botão fixo para abrir o agendamento. -->
   <a class="whatsapp-float" data-whatsapp-link href="#" target="_blank" rel="noopener noreferrer" aria-label="Agendar pelo WhatsApp">
     <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M16 3.2a12.75 12.75 0 0 0-10.94 19.3L3.3 28.8l6.48-1.7A12.78 12.78 0 1 0 16 3.2Zm0 23.25a10.48 10.48 0 0 1-5.34-1.46l-.38-.23-3.85 1.01 1.03-3.75-.25-.39A10.45 10.45 0 1 1 16 26.45Zm5.74-7.83c-.31-.16-1.82-.9-2.1-1s-.49-.16-.7.16-.8 1-.98 1.2-.36.24-.67.08a8.52 8.52 0 0 1-2.47-1.52 9.26 9.26 0 0 1-1.71-2.13c-.18-.31-.02-.48.14-.64.14-.14.31-.36.47-.54.16-.18.21-.31.31-.52.1-.21.05-.39-.03-.55-.08-.16-.7-1.68-.96-2.3-.25-.6-.51-.52-.7-.53h-.6c-.21 0-.55.08-.83.39s-1.09 1.06-1.09 2.58 1.12 2.99 1.27 3.2c.16.21 2.2 3.36 5.33 4.71.75.32 1.33.51 1.79.65.75.24 1.43.2 1.97.12.6-.09 1.82-.74 2.08-1.46.26-.72.26-1.34.18-1.47-.08-.13-.29-.21-.6-.37Z"/></svg>
   </a>
 
+  <!-- CONFIGURAÇÃO: carregue primeiro para o script saber os dados do cliente. -->
   <script src="javascript/configuracao.js"></script>
+  <!-- LÓGICA: carrega comportamento, agendamento, menu e galeria. -->
   <script src="javascript/script.js"></script>
 </body>
 </html>
