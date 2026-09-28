@@ -11,6 +11,7 @@ const CONFIG = {
   heroTitle: "Seu estilo começa aqui.",
   seoTitle: "Barbearia Básico | Seu estilo começa aqui.",
   seoDescription: "Conheça nossos serviços, veja nosso trabalho e agende seu horário pelo WhatsApp.",
+  // Para compartilhamento social, prefira uma imagem JPG/PNG local ou uma URL absoluta.
   ogImage: "recursos/identidade/logo.svg",
   cores: {
     principal: "#c9a66b",
