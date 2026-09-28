@@ -52,11 +52,11 @@ const CONFIG = {
   ],
 
   galeria: [
-    { src: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbeiro realizando corte masculino" },
-    { src: "https://images.unsplash.com/photo-1621605815971-fbc98d5d2ab6?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
-    { src: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbearia com atendimento profissional" },
-    { src: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Barbeiro trabalhando no corte" },
-    { src: "https://images.unsplash.com/photo-1512690459411-b0fd6e2e15e6?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Ferramentas e ambiente de barbearia" },
-    { src: "https://images.unsplash.com/photo-1534297635766-a262cdcb8ee4?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=1200", alt: "Estilo masculino em barbearia" }
+    { src: "https://images.pexels.com/photos/4422101/pexels-photo-4422101.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro realizando corte masculino" },
+    { src: "https://images.pexels.com/photos/5584458/pexels-photo-5584458.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Detalhe de acabamento de cabelo masculino" },
+    { src: "https://images.pexels.com/photos/2076930/pexels-photo-2076930.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbearia com atendimento profissional" },
+    { src: "https://images.pexels.com/photos/7697280/pexels-photo-7697280.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Barbeiro trabalhando no corte" },
+    { src: "https://images.pexels.com/photos/7518731/pexels-photo-7518731.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Ferramentas e ambiente de barbearia" },
+    { src: "https://images.pexels.com/photos/4625639/pexels-photo-4625639.jpeg?auto=compress&cs=tinysrgb&w=1200", alt: "Estilo masculino em barbearia" }
   ]
 };
