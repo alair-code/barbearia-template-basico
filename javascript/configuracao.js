@@ -3,6 +3,7 @@
 
 const CONFIG = {
   nome: "Barbearia Básico",
+  logo: "recursos/identidade/logo.svg",
   descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
   heroTitle: "Seu estilo começa aqui.",
   heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
