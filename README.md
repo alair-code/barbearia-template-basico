@@ -58,7 +58,7 @@ Use o número no formato internacional, somente com números.
 
 ### Instagram, endereço, mapa e horário
 
-Todos ficam no mesmo arquivo:
+Todos ficam no mesmo arquivo. O texto visual do horário é gerado automaticamente a partir de `CONFIG.funcionamento`, evitando divergência entre o horário exibido e o usado no agendamento:
 
 ```js
 instagram: "@barbearia",
@@ -126,7 +126,9 @@ A Vercel consegue hospedar os arquivos HTML, CSS, JavaScript e SVG diretamente.
 
 ## Fluxo do produto
 
-**Site → WhatsApp → cliente combina o horário.**
+**Site → cliente escolhe serviço/data/horário → WhatsApp → barbeiro confirma.**
+
+O template possui solicitação de agendamento pelo WhatsApp. Os horários são calculados pelo funcionamento configurado e pela duração do serviço escolhido, mas o site não registra reservas nem bloqueia conflitos.
 
 Este template propositalmente não possui:
 
@@ -134,8 +136,8 @@ Este template propositalmente não possui:
 - PostgreSQL, Neon ou Supabase;
 - login ou cadastro;
 - painel administrativo;
-- agendamento online;
-- controle de disponibilidade;
+- reserva automática;
+- controle de conflitos entre clientes;
 - prevenção de conflitos;
 - histórico de clientes;
 - pagamentos;
@@ -170,3 +172,8 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 O botão de agendamento abre um formulário para o cliente informar **nome, data e horário**. Os horários são gerados automaticamente a partir de `CONFIG.funcionamento`, respeitando o dia da semana, o horário de abertura/fechamento e o horário atual quando a data escolhida é hoje. Dias configurados como `null` ficam fechados e não exibem horários.
 
 A confirmação abre o WhatsApp com nome, data e horário escolhidos na mensagem para o barbeiro.
+
+
+### Funcionamento do agendamento
+
+Configure os horários por dia em `CONFIG.funcionamento`. Use `null` para dias fechados. O cliente precisa escolher o serviço, e a duração configurada em `CONFIG.servicos[].duracao` é usada para garantir que o horário de início caiba dentro do expediente. Os horários são oferecidos em intervalos de 10 minutos e, para a data atual, horários já iniciados não aparecem.
