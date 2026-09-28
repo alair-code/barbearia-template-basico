@@ -5,6 +5,8 @@ const CONFIG = {
   nome: "Barbearia Básico",
   // Logo padrão ilustrativa — substitua pela logo real do cliente quando ele enviar.
   logo: "recursos/identidade/logo.svg",
+  // Favicon padrão — substitua pelo favicon real do cliente quando ele enviar.
+  favicon: "recursos/identidade/logo.svg",
   descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
   heroTitle: "Seu estilo começa aqui.",
   heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
