@@ -122,12 +122,6 @@
       : "Escolha o dia do atendimento. Os horários serão calculados para a data selecionada.";
   };
 
-  const addDaysToIso = (isoDate, days) => {
-    const [year, month, day] = isoDate.split("-").map(Number);
-    const date = new Date(year, month - 1, day);
-    date.setDate(date.getDate() + days);
-    return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
-  };
 
   // Mostra uma ação clara para continuar o agendamento em outro dia.
   const showNextDateOption = (fromDate) => {
