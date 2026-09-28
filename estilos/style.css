@@ -1,4 +1,8 @@
 :root {
+  /* CORES GLOBAIS DO SITE — altere somente estes dois valores para personalizar a identidade visual */
+  --primary-color: #c9a66b;
+  --secondary-color: #f4f1eb;
+
   /* A imagem da capa é definida em javascript/configuracao.js */
   --hero-image: none;
   --bg: #0b0b0b;
@@ -6,9 +10,9 @@
   --surface-2: #1d1d1d;
   --text: #f5f3ee;
   --muted: #aaa7a0;
-  --light: #f4f1eb;
+  --light: var(--secondary-color);
   --dark-text: #171717;
-  --accent: #c9a66b;
+  --accent: var(--primary-color);
   --border: rgba(255,255,255,.12);
   --shadow: 0 24px 60px rgba(0,0,0,.18);
   --radius: 18px;
