@@ -67,6 +67,22 @@
   setText("horario", config.horario);
   setText("whatsappDisplay", config.whatsapp);
 
+  const footer = config.footer || {};
+  const footerCopyright = document.querySelector("[data-footer=\"copyright\"]");
+  const footerCredit = document.querySelector("[data-footer=\"credit\"]");
+  const footerCreditLink = document.querySelector("[data-footer=\"credit-link\"]");
+  if (footerCopyright) {
+    footerCopyright.textContent = footer.texto || "Todos os direitos reservados.";
+  }
+  if (footerCredit) {
+    footerCredit.textContent = footer.credito || "";
+    footerCredit.hidden = !footer.credito;
+  }
+  if (footerCreditLink) {
+    footerCreditLink.href = footer.creditoUrl || "#";
+    footerCreditLink.hidden = !footer.creditoUrl;
+  }
+
   document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
     link.href = whatsappUrl;
   });
