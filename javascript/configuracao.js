@@ -7,17 +7,6 @@
 // Não é necessário alterar o HTML para trocar os dados principais.
 
 const CONFIG = {
-  // ============================================================
-  // CORES GLOBAIS — altere aqui para personalizar a identidade visual.
-  // primaria = cor principal / destaques / botões / links.
-  // secundaria = cor secundária / áreas claras do site.
-  // Exemplo: primaria: "#c9a66b", secundaria: "#f4f1eb"
-  // ============================================================
-  cores: {
-    primaria: "#c9a66b",
-    secundaria: "#f4f1eb"
-  },
-
   // NOME: nome que aparece no cabeçalho, rodapé e textos configuráveis.
   nome: "Barbearia Básico",
   // LOGO: caminho da logo dentro de recursos/identidade/.
@@ -149,9 +138,9 @@ const CONFIG = {
     }
   ],
 
-  // GALERIA: coloque as fotos do cliente em recursos/imagens/galeria/.
-// Informe somente o caminho local da imagem e o texto alternativo.
-galeria: [
+    // GALERIA: coloque as fotos do cliente em recursos/imagens/galeria/.
+  // Informe somente o caminho local da imagem e o texto alternativo.
+  galeria: [
     { src: "recursos/imagens/galeria/galeria-01.svg", alt: "Corte masculino" },
     { src: "recursos/imagens/galeria/galeria-02.svg", alt: "Acabamento profissional" },
     { src: "recursos/imagens/galeria/galeria-03.svg", alt: "Ambiente da barbearia" },
