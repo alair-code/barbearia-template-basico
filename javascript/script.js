@@ -39,8 +39,14 @@
   }
 
   // IMAGEM DA CAPA
+  // Se for apenas o nome do arquivo, procura automaticamente em recursos/imagens/capa/.
+  // Se for uma URL ou caminho absoluto, usa o valor informado.
   if (config.heroImage) {
-    document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
+    const heroImage = /^(https?:|data:|\/)/i.test(config.heroImage)
+      ? config.heroImage
+      : "recursos/imagens/capa/" + config.heroImage.replace(/^\.\//, "");
+    const safeHeroImage = heroImage.replace(/"/g, '\\"');
+    document.documentElement.style.setProperty("--hero-image", 'url("' + safeHeroImage + '")');
   }
 
   // ============================================================
