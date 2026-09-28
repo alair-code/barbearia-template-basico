@@ -65,7 +65,6 @@ instagram: "@barbearia",
 instagramUrl: "https://instagram.com/",
 endereco: "Rua Exemplo, 123 — Centro",
 mapaUrl: "https://maps.google.com/",
-horario: "Segunda a sábado, 09h às 19h",
 ```
 
 ### Footer
@@ -138,7 +137,6 @@ Este template propositalmente não possui:
 - painel administrativo;
 - reserva automática;
 - controle de conflitos entre clientes;
-- prevenção de conflitos;
 - histórico de clientes;
 - pagamentos;
 - Mercado Pago;
@@ -152,7 +150,7 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Trocar nome e descrição.
 - [ ] Configurar WhatsApp e mensagem.
 - [ ] Configurar Instagram.
-- [ ] Configurar endereço, mapa e horário.
+- [ ] Configurar endereço, mapa e horários em `CONFIG.funcionamento`.
 - [ ] Atualizar serviços e preços.
 - [ ] Configurar footer.
 - [ ] Substituir imagens de demonstração por fotos autorizadas.
@@ -164,14 +162,14 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Testar em celular, tablet e desktop.
 - [ ] Executar `npm run check`.
 - [ ] Revisar título, descrição, imagem de compartilhamento e cores.
-- [ ] Se possível, substituir imagens externas por arquivos locais autorizados.
+- [ ] Substituir imagens de demonstração externas por arquivos locais autorizados sempre que possível.
 
 
 ### Agendamento via WhatsApp
 
-O botão de agendamento abre um formulário para o cliente informar **nome, data e horário**. Os horários são gerados automaticamente a partir de `CONFIG.funcionamento`, respeitando o dia da semana, o horário de abertura/fechamento e o horário atual quando a data escolhida é hoje. Dias configurados como `null` ficam fechados e não exibem horários.
+O botão de agendamento abre um formulário para o cliente informar **nome, serviço, data e horário**. Os horários são gerados automaticamente a partir de `CONFIG.funcionamento`, respeitando o dia da semana, o horário de abertura/fechamento e o horário atual quando a data escolhida é hoje. Dias configurados como `null` ficam fechados e não exibem horários.
 
-A confirmação abre o WhatsApp com nome, data e horário escolhidos na mensagem para o barbeiro.
+A confirmação abre o WhatsApp com nome, serviço, data e horário escolhidos na mensagem para o barbeiro.
 
 
 ### Funcionamento do agendamento
