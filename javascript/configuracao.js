@@ -6,9 +6,37 @@ const CONFIG = {
   // Logo padrão ilustrativa — substitua pela logo real do cliente quando ele enviar.
   logo: "recursos/identidade/logo.svg",
   // Favicon padrão — substitua pelo favicon real do cliente quando ele enviar.
-  favicon: "recursos/identidade/logo.svg",
+  favicon: "recursos/identidade/favicon.svg",
   descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
   heroTitle: "Seu estilo começa aqui.",
+  seoTitle: "Barbearia Básico | Seu estilo começa aqui.",
+  seoDescription: "Conheça nossos serviços, veja nosso trabalho e agende seu horário pelo WhatsApp.",
+  ogImage: "recursos/identidade/logo.svg",
+  cores: {
+    principal: "#c9a66b",
+    fundo: "#0b0b0b",
+    superficie: "#151515",
+    superficieAlternativa: "#1d1d1d",
+    texto: "#f5f3ee",
+    textoSuave: "#aaa7a0"
+  },
+  sobre: {
+    titulo: "Mais do que um corte, uma experiência.",
+    textos: [
+      "Um espaço pensado para quem gosta de se cuidar, renovar o visual e sair satisfeito.",
+      "Atendimento próximo, ambiente confortável e serviços feitos com atenção aos detalhes."
+    ]
+  },
+  diferenciais: [
+    { titulo: "Atendimento personalizado", descricao: "Cada serviço pensado para valorizar seu estilo." },
+    { titulo: "Cuidado nos detalhes", descricao: "Acabamento preciso do início ao resultado final." },
+    { titulo: "Praticidade", descricao: "Fale pelo WhatsApp e combine seu horário com facilidade." }
+  ],
+  ctaTitulo: "Gostou de algum serviço?",
+  ctaDescricao: "Chame no WhatsApp e combine seu próximo horário.",
+  localTitulo: "Visite a barbearia",
+  localDescricao: "Confira o endereço, horário de atendimento e como chegar.",
+
   heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
   whatsapp: "5500000000000",
   whatsappMensagem: "Olá! Gostaria de agendar um horário na barbearia.",
