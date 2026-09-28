@@ -3,6 +3,40 @@
 
   const config = CONFIG;
 
+  const root = document.documentElement;
+  if (config.cores) {
+    Object.entries({
+      "--accent": config.cores.principal,
+      "--bg": config.cores.fundo,
+      "--surface": config.cores.superficie,
+      "--surface-2": config.cores.superficieAlternativa,
+      "--text": config.cores.texto,
+      "--muted": config.cores.textoSuave
+    }).forEach(([property, value]) => {
+      if (value) root.style.setProperty(property, value);
+    });
+  }
+
+  if (config.seoTitle) {
+    document.title = config.seoTitle;
+    const titleMeta = document.querySelector('[data-meta-config="title"]');
+    if (titleMeta) titleMeta.textContent = config.seoTitle;
+  }
+  if (config.seoDescription) {
+    const descriptionMeta = document.querySelector('[data-meta-config="description"]');
+    if (descriptionMeta) descriptionMeta.setAttribute("content", config.seoDescription);
+    const ogDescription = document.querySelector('[data-meta-config="og:description"]');
+    if (ogDescription) ogDescription.setAttribute("content", config.seoDescription);
+  }
+  if (config.seoTitle) {
+    const ogTitle = document.querySelector('[data-meta-config="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", config.seoTitle);
+  }
+  if (config.ogImage) {
+    const ogImage = document.querySelector('[data-meta-config="og:image"]');
+    if (ogImage) ogImage.setAttribute("content", config.ogImage);
+  }
+
   if (config.heroImage) {
     document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
   }
@@ -26,6 +60,7 @@
     favicon.href = config.favicon;
   }
   setText("descricao", config.descricao);
+  setText("sobreTitulo", config.sobre?.titulo || "Mais do que um corte, uma experiência.");
   setText("heroTitle", config.heroTitle);
   setText("instagram", config.instagram);
   setText("endereco", config.endereco);
@@ -62,6 +97,22 @@
       <img src="${image.src}" alt="${image.alt}" loading="eager" decoding="async" referrerpolicy="no-referrer">
     </button>
   `).join("");
+
+  const aboutCopy = document.querySelector("#about-copy");
+  if (aboutCopy && Array.isArray(config.sobre?.textos)) {
+    aboutCopy.innerHTML = config.sobre.textos.map((paragraph) => `<p>${paragraph}</p>`).join("");
+  }
+
+  const differentialsList = document.querySelector("#differentials-list");
+  if (differentialsList && Array.isArray(config.diferenciais)) {
+    differentialsList.innerHTML = config.diferenciais.map((item, index) => `
+      <article class="differential-card">
+        <span class="differential-index">0${index + 1}</span>
+        <h3>${item.titulo}</h3>
+        <p>${item.descricao}</p>
+      </article>
+    `).join("");
+  }
 
   const menuToggle = document.querySelector(".menu-toggle");
   const siteMenu = document.querySelector("#site-menu");
