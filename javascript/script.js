@@ -453,6 +453,74 @@
     }
   }
 
+  // ============================================================
+  // INFORMAÇÕES JURÍDICAS DO RODAPÉ
+  // ============================================================
+  const legalConfig = footer.juridico || {};
+  const legalModal = document.querySelector("#legal-modal");
+  const legalTitle = document.querySelector("#legal-title");
+  const legalContent = document.querySelector("#legal-content");
+  const legalClose = document.querySelector(".legal-close");
+  let activeLegalTrigger = null;
+
+  const legalSections = {
+    termos: legalConfig.termos,
+    privacidade: legalConfig.privacidade,
+    avisoLegal: legalConfig.avisoLegal
+  };
+
+  const openLegal = (key, trigger) => {
+    const section = legalSections[key];
+    if (!legalModal || !section) return;
+    activeLegalTrigger = trigger || null;
+    legalTitle.textContent = section.titulo || "Informações legais";
+    legalContent.replaceChildren();
+    String(section.texto || "").split(/\\n\\s*\\n/).filter(Boolean).forEach((paragraph) => {
+      const p = document.createElement("p");
+      p.textContent = paragraph.trim();
+      legalContent.appendChild(p);
+    });
+    legalModal.classList.add("is-open");
+    legalModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+    legalClose?.focus();
+  };
+
+  const closeLegal = () => {
+    if (!legalModal) return;
+    legalModal.classList.remove("is-open");
+    legalModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("no-scroll");
+    if (activeLegalTrigger) {
+      activeLegalTrigger.focus();
+      activeLegalTrigger = null;
+    }
+  };
+
+  document.querySelectorAll("[data-legal-link]").forEach((link) => {
+    const key = link.dataset.legalLink;
+    const section = legalSections[key];
+    if (!legalConfig.habilitado || !section) {
+      link.hidden = true;
+      return;
+    }
+    link.href = section.url || ("#" + key);
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openLegal(key, link);
+    });
+  });
+
+  if (!legalConfig.habilitado) {
+    document.querySelector(".footer-links")?.remove();
+  }
+  if (legalClose) legalClose.addEventListener("click", closeLegal);
+  if (legalModal) {
+    legalModal.addEventListener("click", (event) => {
+      if (event.target === legalModal) closeLegal();
+    });
+  }
+
   // LINKS DE WHATSAPP
   document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
     link.href = "#agendar";
@@ -655,7 +723,12 @@
 
   // TECLADO: ESC fecha janelas abertas e o menu; TAB permanece dentro das janelas.
   document.addEventListener("keydown", (event) => {
-    if (trapFocus(lightbox, event) || trapFocus(bookingModal, event)) return;
+    if (trapFocus(legalModal, event) || trapFocus(lightbox, event) || trapFocus(bookingModal, event)) return;
+
+    if (event.key === "Escape" && legalModal?.classList.contains("is-open")) {
+      closeLegal();
+      return;
+    }
 
     if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
       closeLightbox();
