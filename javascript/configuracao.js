@@ -50,7 +50,6 @@ const CONFIG = {
   instagramUrl: "https://instagram.com/",
   endereco: "Rua Exemplo, 123 — Centro",
   mapaUrl: "https://maps.google.com/",
-  horario: "Segunda a sábado, 09h às 19h",
   // Horários usados pelo agendamento. Chaves: 0=domingo, 1=segunda ... 6=sábado.
   // Use null para dia fechado.
   funcionamento: {
