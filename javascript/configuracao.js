@@ -50,7 +50,7 @@ const CONFIG = {
     creditoUrl: ""
   },
 
-  // CAPA: imagem principal do topo.\n  // Coloque a foto autorizada do cliente em recursos/imagens/capa/hero.jpg.\n  // O template usa este caminho local para carregar a capa.\n  heroImage: "https://www.biggerthan-business.com/gallery/row2-1.jpg",
+  // CAPA: imagem principal do topo.\n  // Coloque a foto autorizada do cliente em recursos/imagens/capa/hero.jpg.\n  // O template usa este caminho local para carregar a capa.\n  heroImage: "recursos/imagens/capa/hero.jpg",
   // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.
   whatsapp: "5500000000000",
   // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.
