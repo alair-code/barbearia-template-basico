@@ -149,36 +149,18 @@ button { font: inherit; }
 
 .site-footer { padding: 28px 0; background: #090909; color: #777; font-size: .82rem; }
 .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+.footer-inner a { color: #aaa; text-decoration: none; }
+.footer-inner a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 .whatsapp-float { position: fixed; right: 22px; bottom: 22px; z-index: 40; width: 60px; height: 60px; display: grid; place-items: center; border-radius: 50%; background: #25d366; color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 -2px 0 rgba(0,0,0,.08); transition: transform .2s ease, box-shadow .2s ease; animation: whatsapp-pulse 2.8s ease-in-out infinite; }
 .whatsapp-float:hover { transform: scale(1.07); box-shadow: 0 14px 30px rgba(0,0,0,.32), inset 0 -2px 0 rgba(0,0,0,.08); animation-play-state: paused; }
 .whatsapp-float svg { width: 35px; height: 35px; display: block; fill: currentColor; }
 @keyframes whatsapp-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 -2px 0 rgba(0,0,0,.08);
-  }
-  15% {
-    opacity: .68;
-    transform: scale(.95);
-    box-shadow: 0 7px 18px rgba(0,0,0,.24), 0 0 0 4px rgba(37,211,102,.16), inset 0 -2px 0 rgba(0,0,0,.08);
-  }
-  30% {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: 0 10px 24px rgba(0,0,0,.28), 0 0 0 7px rgba(37,211,102,.10), inset 0 -2px 0 rgba(0,0,0,.08);
-  }
-  45% {
-    opacity: .78;
-    transform: scale(.97);
-    box-shadow: 0 8px 20px rgba(0,0,0,.25), 0 0 0 4px rgba(37,211,102,.13), inset 0 -2px 0 rgba(0,0,0,.08);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: 0 10px 24px rgba(0,0,0,.28), 0 0 0 6px rgba(37,211,102,.08), inset 0 -2px 0 rgba(0,0,0,.08);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 -2px 0 rgba(0,0,0,.08); }
+  15% { opacity: .68; transform: scale(.95); box-shadow: 0 7px 18px rgba(0,0,0,.24), 0 0 0 4px rgba(37,211,102,.16), inset 0 -2px 0 rgba(0,0,0,.08); }
+  30% { opacity: 1; transform: scale(1); box-shadow: 0 10px 24px rgba(0,0,0,.28), 0 0 0 7px rgba(37,211,102,.10), inset 0 -2px 0 rgba(0,0,0,.08); }
+  45% { opacity: .78; transform: scale(.97); box-shadow: 0 8px 20px rgba(0,0,0,.25), 0 0 0 4px rgba(37,211,102,.13), inset 0 -2px 0 rgba(0,0,0,.08); }
+  60% { opacity: 1; transform: scale(1); box-shadow: 0 10px 24px rgba(0,0,0,.28), 0 0 0 6px rgba(37,211,102,.08), inset 0 -2px 0 rgba(0,0,0,.08); }
 }
 @media (prefers-reduced-motion: reduce) {
   .whatsapp-float { animation: none; }
@@ -213,10 +195,7 @@ button { font: inherit; }
   .site-nav.is-open { display: flex; }
   .site-nav > a:not(.button) { padding: 12px 4px; }
   .site-nav .button { margin-top: 8px; }
-  .hero {
-    min-height: 78vh;
-    background-position: 62% center;
-  }
+  .hero { min-height: 78vh; background-position: 62% center; }
   .hero-content { padding: 88px 0; }
   .hero-content::after { left: 0; bottom: 38px; }
   .hero h1 { font-size: clamp(3rem, 15vw, 5rem); }
