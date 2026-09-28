@@ -7,6 +7,17 @@
 // Não é necessário alterar o HTML para trocar os dados principais.
 
 const CONFIG = {
+  // ============================================================
+  // CORES GLOBAIS — altere aqui para personalizar a identidade visual.
+  // primaria = cor principal / destaques / botões / links.
+  // secundaria = cor secundária / áreas claras do site.
+  // Exemplo: primaria: "#c9a66b", secundaria: "#f4f1eb"
+  // ============================================================
+  cores: {
+    primaria: "#c9a66b",
+    secundaria: "#f4f1eb"
+  },
+
   // NOME: nome que aparece no cabeçalho, rodapé e textos configuráveis.
   nome: "Barbearia Básico",
   // LOGO: caminho da logo dentro de recursos/identidade/.
