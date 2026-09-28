@@ -154,6 +154,32 @@
     </div>
   </footer>
 
+  <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" aria-hidden="true">
+    <div class="booking-panel">
+      <button class="booking-close" type="button" aria-label="Fechar agendamento">×</button>
+      <p class="section-kicker">AGENDAMENTO</p>
+      <h2 id="booking-title">Escolha seu horário</h2>
+      <p class="booking-status" id="booking-status">Selecione uma data para ver os horários disponíveis.</p>
+      <form id="booking-form">
+        <label>
+          Seu nome
+          <input id="booking-name" name="name" type="text" autocomplete="name" placeholder="Digite seu nome" required>
+        </label>
+        <label>
+          Data
+          <input id="booking-date" name="date" type="date" required>
+        </label>
+        <label>
+          Horário
+          <select id="booking-time" name="time" required disabled>
+            <option value="">Selecione uma data primeiro</option>
+          </select>
+        </label>
+        <button class="button" type="submit">Enviar agendamento pelo WhatsApp</button>
+      </form>
+    </div>
+  </div>
+
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
     <span id="lightbox-title" class="sr-only">Visualização ampliada da imagem</span>
     <button class="lightbox-close" type="button" aria-label="Fechar imagem">×</button>
