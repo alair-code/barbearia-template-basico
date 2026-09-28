@@ -163,9 +163,24 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="current-year"></span> <span data-config="nome">Barbearia Básico</span> • <span data-footer="copyright">Todos os direitos reservados.</span></span>
-      <span data-footer="credit" hidden>Desenvolvido com profissionalismo.</span>
+      <div class="footer-links" aria-label="Informações legais">
+        <a href="#termos" data-legal-link="termos">Termos de Uso</a>
+        <a href="#privacidade" data-legal-link="privacidade">Política de Privacidade</a>
+        <a href="#aviso-legal" data-legal-link="avisoLegal">Aviso Legal</a>
+        <span data-footer="credit" hidden>Desenvolvido com profissionalismo.</span>
+      </div>
     </div>
   </footer>
+
+  <!-- MODAL JURÍDICO: conteúdo carregado de CONFIG.footer.juridico. -->
+  <div class="legal-modal" id="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legal-title" aria-hidden="true">
+    <div class="legal-panel">
+      <button class="legal-close" type="button" aria-label="Fechar informações jurídicas">×</button>
+      <p class="section-kicker">INFORMAÇÕES LEGAIS</p>
+      <h2 id="legal-title">Informações legais</h2>
+      <div class="legal-content" id="legal-content"></div>
+    </div>
+  </div>
 
   <!-- MODAL DE AGENDAMENTO: não altere a estrutura sem necessidade. -->
   <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" aria-hidden="true">
