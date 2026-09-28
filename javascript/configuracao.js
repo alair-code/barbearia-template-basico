@@ -46,8 +46,9 @@ const CONFIG = {
   // RODAPÉ: textos exibidos no final da página.
   footer: {
     texto: "Todos os direitos reservados.",
-    credito: "Desenvolvido com profissionalismo.",
-    creditoUrl: ""
+    credito: "Desenvolvido por Alair Soares",
+    // LINK DO DESENVOLVEDOR: altere aqui quando quiser apontar para outro site.
+    creditoUrl: "https://alair-info.vercel.app/"
   },
 
   // CAPA: imagem principal do topo.
