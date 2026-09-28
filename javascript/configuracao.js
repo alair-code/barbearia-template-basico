@@ -50,11 +50,7 @@ const CONFIG = {
     creditoUrl: ""
   },
 
-  // CAPA: imagem principal do topo.
-  // O template usa esta foto de demonstração até você colocar a foto do cliente.
-  // Para um cliente real, coloque a foto em recursos/imagens/capa/hero.jpg
-  // e troque o valor abaixo para: "recursos/imagens/capa/hero.jpg".
-  heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
+  // CAPA: imagem principal do topo.\n  // Coloque a foto autorizada do cliente em recursos/imagens/capa/hero.jpg.\n  // O template usa este caminho local para carregar a capa.\n  heroImage: "recursos/imagens/capa/hero.jpg",
   // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.
   whatsapp: "5500000000000",
   // MENSAGEM DO WHATSAPP: texto inicial enviado quando o cliente agenda.
