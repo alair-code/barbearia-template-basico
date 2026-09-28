@@ -28,7 +28,7 @@ barbearia-basico/
     ├── identidade/
     │   ├── logo.svg
     │   └── favicon.svg
-    └── imagens/
+    └── imagens/\n        ├── capa/\n        │   ├── hero.jpg\n        │   └── README.md\n        └── galeria/
 ```
 
 ## Personalização rápida
