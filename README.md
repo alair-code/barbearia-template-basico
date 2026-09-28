@@ -33,7 +33,7 @@ barbearia-basico/
 
 ## Personalização rápida
 
-A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos, serviços, contatos e imagens.
+A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos, serviços, contatos, imagens e footer.
 
 ### Nome e descrição
 
@@ -68,6 +68,20 @@ mapaUrl: "https://maps.google.com/",
 horario: "Segunda a sábado, 09h às 19h",
 ```
 
+### Footer
+
+O conteúdo da footer também fica centralizado em `CONFIG.footer`:
+
+```js
+footer: {
+  texto: "Todos os direitos reservados.",
+  credito: "Desenvolvido com profissionalismo.",
+  creditoUrl: ""
+},
+```
+
+Quando `creditoUrl` estiver preenchido, o próprio texto de crédito se torna um link e abre em nova aba.
+
 ### Serviços
 
 Edite o array `servicos` para trocar nomes, descrições, preços e duração.
@@ -75,6 +89,8 @@ Edite o array `servicos` para trocar nomes, descrições, preços e duração.
 ### Imagens
 
 As imagens da galeria são definidas no array `galeria` de **`javascript/configuracao.js`**. Para uma entrega comercial, prefira baixar as fotos autorizadas do cliente para **`recursos/imagens/`** e usar caminhos locais, por exemplo `recursos/imagens/galeria-01.jpg`. Isso evita dependências externas e melhora a previsibilidade do site.
+
+As imagens da galeria carregam de forma lazy e possuem um SVG local de fallback caso uma imagem externa não esteja disponível.
 
 ### Identidade visual
 
@@ -84,6 +100,8 @@ As imagens da galeria são definidas no array `galeria` de **`javascript/configu
 - Imagem da capa em `CONFIG.heroImage`
 - Imagem de compartilhamento em `CONFIG.ogImage`
 - `estilos/style.css`
+
+A cor do tema do navegador também acompanha `CONFIG.cores.fundo`.
 
 ## Executar localmente
 
@@ -134,11 +152,13 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Configurar Instagram.
 - [ ] Configurar endereço, mapa e horário.
 - [ ] Atualizar serviços e preços.
-- [ ] Substituir imagens de demonstração por fotos autorizadas do cliente.
+- [ ] Configurar footer.
+- [ ] Substituir imagens de demonstração por fotos autorizadas.
 - [ ] Atualizar logo e favicon.
 - [ ] Testar menu mobile.
 - [ ] Testar todos os links e botões.
 - [ ] Testar WhatsApp, Instagram e Google Maps.
+- [ ] Testar galeria e abertura das imagens.
 - [ ] Testar em celular, tablet e desktop.
 - [ ] Executar `npm run check`.
 - [ ] Revisar título, descrição, imagem de compartilhamento e cores.
