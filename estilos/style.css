@@ -130,6 +130,10 @@ button { font: inherit; }
 .booking-panel { position: relative; width: min(100%, 520px); max-height: min(90vh, 720px); overflow: auto; padding: 34px; border: 1px solid rgba(201,166,107,.35); border-radius: 22px; background: #111; color: var(--text); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
 .booking-panel h2 { margin: 0 0 10px; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; letter-spacing: -.045em; }
 .booking-status { margin: 0 0 14px; color: var(--muted); }
+.booking-date-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: -4px 0 10px; }
+.booking-date-action { min-height: 42px; padding: 8px 10px; border: 1px solid rgba(201,166,107,.3); border-radius: 10px; background: #171717; color: #ddd8cf; font: inherit; font-size: .82rem; font-weight: 800; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.booking-date-action:hover, .booking-date-action:focus-visible { border-color: var(--accent); background: rgba(201,166,107,.1); color: var(--accent); }
+.booking-date-context { margin: 0 0 14px; color: #8f8b84; font-size: .82rem; line-height: 1.45; }
 .booking-next-day { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin: 0 0 24px; padding: 10px 14px; border: 1px solid rgba(201,166,107,.45); border-radius: 10px; background: rgba(201,166,107,.08); color: var(--accent); font: inherit; font-weight: 800; cursor: pointer; }
 .booking-next-day:hover { background: rgba(201,166,107,.16); }
 .booking-close { position: absolute; top: 14px; right: 18px; border: 0; background: transparent; color: #fff; font-size: 2rem; line-height: 1; cursor: pointer; }
@@ -182,6 +186,7 @@ button { font: inherit; }
   .contact-grid > div, .contact-card { min-width: 0; }
   .contact-item a { overflow-wrap: anywhere; }
   .booking-panel { width: 100%; padding: 28px 22px; }
+  .booking-date-actions { grid-template-columns: 1fr; }
   .lightbox { padding: 16px; }
   .header-inner { min-height: 82px; }
   .brand img { width: 62px; height: 62px; }
