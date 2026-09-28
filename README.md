@@ -1,6 +1,6 @@
 # Barbearia Básico
 
-Template institucional estático para pequenas barbearias. A proposta é entregar uma presença profissional na internet com baixo custo de instalação e manutenção.
+Site institucional estático e reutilizável para pequenas barbearias. A proposta é entregar uma presença profissional na internet com baixo custo de instalação e manutenção, mantendo a estrutura simples para facilitar a personalização de cada cliente.
 
 ## Tecnologias
 
@@ -29,21 +29,38 @@ barbearia-basico/
     │   ├── logo.svg
     │   └── favicon.svg
     └── imagens/
+        ├── capa/
+        │   ├── hero.svg
+        │   └── README.md
+        └── galeria/
+            ├── galeria-01.svg
+            ├── galeria-02.svg
+            ├── galeria-03.svg
+            ├── galeria-04.svg
+            ├── galeria-05.svg
+            └── galeria-06.svg
 ```
 
 ## Personalização rápida
 
-A maior parte da personalização fica em **`javascript/configuracao.js`**.
+A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, textos comerciais, serviços, contatos, imagens, horários e footer. As cores globais ficam no início de **`estilos/style.css`**.
 
-### Nome e descrição
+### Cores globais do site
 
-Altere:
+As cores principais do site ficam centralizadas no início de estilos/style.css, dentro de :root:
 
-```js
-nome: "Barbearia Básico",
-descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
-heroTitle: "Seu estilo começa aqui.",
-```
+- --primary-color: cor primária, usada nos destaques, botões, links e elementos de identidade.
+- --secondary-color: cor secundária, usada como base das seções claras do layout.
+
+Para criar uma nova versão para um cliente, altere esses dois valores primeiro. O restante do CSS utiliza as variáveis globais, evitando a necessidade de procurar e substituir dezenas de códigos de cor.
+
+### Nome, descrição e copy comercial
+
+A estrutura de textos do template foi pensada para apresentar o serviço de forma comercial, despertar interesse e conduzir o visitante até o agendamento. Ao criar um novo cliente, mantenha a estrutura da copy e personalize apenas os dados reais da barbearia, serviços, preços, imagens e identidade visual.
+
+Os principais textos ficam em `CONFIG`, permitindo reutilizar a mesma estratégia de comunicação em diferentes barbearias sem alterar o HTML.
+
+Altere os campos indicados pelos comentários dentro de `CONFIG`. Eles mostram de forma simples o que cada informação controla e onde ela aparece no site.
 
 ### WhatsApp
 
@@ -58,15 +75,28 @@ Use o número no formato internacional, somente com números.
 
 ### Instagram, endereço, mapa e horário
 
-Todos ficam no mesmo arquivo:
+Todos ficam no mesmo arquivo. O texto visual do horário é gerado automaticamente a partir de `CONFIG.funcionamento`, evitando divergência entre o horário exibido e o usado no agendamento:
 
 ```js
 instagram: "@barbearia",
 instagramUrl: "https://instagram.com/",
 endereco: "Rua Exemplo, 123 — Centro",
 mapaUrl: "https://maps.google.com/",
-horario: "Segunda a sábado, 09h às 19h",
 ```
+
+### Footer
+
+O conteúdo da footer também fica centralizado em `CONFIG.footer`:
+
+```js
+footer: {
+  texto: "Todos os direitos reservados.",
+  credito: "Desenvolvido com profissionalismo.",
+  creditoUrl: ""
+},
+```
+
+Quando `creditoUrl` estiver preenchido, o próprio texto de crédito se torna um link e abre em nova aba.
 
 ### Serviços
 
@@ -74,19 +104,24 @@ Edite o array `servicos` para trocar nomes, descrições, preços e duração.
 
 ### Imagens
 
-As imagens da galeria ficam em **`recursos/imagens/`**. Para substituir uma imagem, mantenha o caminho e o formato definido em `configuracao.js`, ou atualize o campo `src`.
+As imagens da galeria são definidas no array `galeria` de **`javascript/configuracao.js`**. Para uma entrega comercial, prefira usar fotos autorizadas do cliente como arquivos locais em **`recursos/imagens/galeria/`**, substituindo os arquivos de demonstração. Isso evita dependências externas e melhora a previsibilidade do site.
 
-As imagens incluídas são SVG locais de demonstração para manter o template independente de bancos de imagens externos. Substitua-as pelas fotos reais do cliente antes da entrega comercial.
+As imagens da galeria carregam de forma lazy e possuem um SVG local de fallback caso uma imagem externa não esteja disponível.
 
 ### Identidade visual
 
 - `recursos/identidade/logo.svg`
 - `recursos/identidade/favicon.svg`
+- Cores globais no início de `estilos/style.css` (`--primary-color` e `--secondary-color`)
+- Imagem da capa em `CONFIG.heroImage`
+- Imagem de compartilhamento em `CONFIG.ogImage`
 - `estilos/style.css`
+
+A cor do tema do navegador usa o fundo definido pelo layout. Se quiser alterar o fundo geral, procure a variável `--bg` no início do CSS.
 
 ## Executar localmente
 
-Não é necessário servidor ou banco de dados para editar o template. Para uma prévia simples, abra `index.html` no navegador.
+Não é necessário servidor ou banco de dados para editar o template. Para testar corretamente recursos locais e externos, prefira um servidor HTTP simples. Abrir diretamente como `file://` pode gerar restrições de segurança no navegador. Use, por exemplo, `python3 -m http.server 5500` e acesse `http://localhost:5500`.
 
 Para validar a sintaxe JavaScript com Node.js:
 
@@ -107,7 +142,9 @@ A Vercel consegue hospedar os arquivos HTML, CSS, JavaScript e SVG diretamente.
 
 ## Fluxo do produto
 
-**Site → WhatsApp → cliente combina o horário.**
+**Site → cliente escolhe serviço/data/horário → WhatsApp → barbeiro confirma.**
+
+O template possui solicitação de agendamento pelo WhatsApp. Os horários são calculados pelo funcionamento configurado e pela duração do serviço escolhido, mas o site não registra reservas nem bloqueia conflitos.
 
 Este template propositalmente não possui:
 
@@ -115,9 +152,8 @@ Este template propositalmente não possui:
 - PostgreSQL, Neon ou Supabase;
 - login ou cadastro;
 - painel administrativo;
-- agendamento online;
-- controle de disponibilidade;
-- prevenção de conflitos;
+- reserva automática;
+- controle de conflitos entre clientes;
 - histórico de clientes;
 - pagamentos;
 - Mercado Pago;
@@ -131,13 +167,52 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Trocar nome e descrição.
 - [ ] Configurar WhatsApp e mensagem.
 - [ ] Configurar Instagram.
-- [ ] Configurar endereço, mapa e horário.
+- [ ] Configurar endereço, mapa e horários em `CONFIG.funcionamento`.
 - [ ] Atualizar serviços e preços.
-- [ ] Substituir imagens de demonstração por fotos autorizadas do cliente.
+- [ ] Configurar footer.
+- [ ] Substituir imagens de demonstração por fotos autorizadas.
 - [ ] Atualizar logo e favicon.
 - [ ] Testar menu mobile.
 - [ ] Testar todos os links e botões.
 - [ ] Testar WhatsApp, Instagram e Google Maps.
+- [ ] Testar galeria e abertura das imagens.
 - [ ] Testar em celular, tablet e desktop.
 - [ ] Executar `npm run check`.
-- [ ] Revisar título, descrição e imagem de compartilhamento.
+- [ ] Revisar título, descrição, imagem de compartilhamento e cores.
+- [ ] Substituir imagens de demonstração externas por arquivos locais autorizados sempre que possível.
+
+
+### Agendamento via WhatsApp
+
+O botão de agendamento abre um formulário para o cliente informar **nome, serviço, data e horário**. Os horários são gerados automaticamente a partir de `CONFIG.funcionamento`, respeitando o dia da semana, o horário de abertura/fechamento e o horário atual quando a data escolhida é hoje. Dias configurados como `null` ficam fechados e não exibem horários.
+
+A confirmação abre o WhatsApp com nome, serviço, data e horário escolhidos na mensagem para o barbeiro.
+
+
+### Funcionamento do agendamento
+
+Configure os horários por dia em `CONFIG.funcionamento`. Use `null` para dias fechados. O cliente precisa escolher o serviço, e a duração configurada em `CONFIG.servicos[].duracao` é usada para garantir que o horário de início caiba dentro do expediente. Os horários são oferecidos em intervalos de 10 minutos e, para a data atual, horários já iniciados não aparecem.
+
+
+## Comentários de configuração
+
+O template foi documentado para facilitar a reutilização por quem não quer procurar cada configuração no código.
+
+- **javascript/configuracao.js**: comentários indicam o que deve ser alterado para cada cliente.
+- **estilos/style.css**: comentários indicam as áreas do layout e, principalmente, onde trocar as cores globais.
+- **index.html**: comentários identificam cada seção e explicam quando a alteração deve ser feita no arquivo de configuração.
+- **javascript/script.js**: comentários explicam cada bloco de funcionamento, como agendamento, WhatsApp, menu, galeria e aplicação dos dados.
+- **404.html**: comentários explicam a página de erro.
+- **Arquivos SVG**: comentários identificam a finalidade de cada arquivo. As cores internas de um SVG são próprias do desenho e podem ser alteradas no próprio arquivo quando a identidade da logo também precisar mudar.
+- **package.json**: é JSON puro e não aceita comentários. A explicação do comando disponível fica neste README.
+
+### Regra simples para criar um novo cliente
+
+1. Abra `javascript/configuracao.js`.
+2. Preencha os dados reais do cliente seguindo os comentários.
+3. Abra `estilos/style.css`.
+4. Troque `--primary-color` e `--secondary-color`.
+5. Substitua logo, favicon e fotos.
+6. Revise serviços, preços, horários, WhatsApp, Instagram, endereço e Google Maps.
+7. Execute `npm run check`.
+8. Teste o site antes de publicar.
