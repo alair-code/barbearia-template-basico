@@ -10,6 +10,14 @@
   const config = CONFIG;
 
   // ============================================================
+  // CORES GLOBAIS
+  // As cores ficam configuráveis em javascript/configuracao.js.
+  // ============================================================
+  const cores = config.cores || {};
+  document.documentElement.style.setProperty("--primary-color", cores.primaria || "#c9a66b");
+  document.documentElement.style.setProperty("--secondary-color", cores.secundaria || "#f4f1eb");
+
+  // ============================================================
   // SEO E IMAGEM PRINCIPAL
   // ============================================================
   // Atualiza título, descrição e imagem usados pelo navegador e
