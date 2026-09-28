@@ -103,8 +103,15 @@ const CONFIG = {
     6: { abertura: "09:00", fechamento: "19:00" }
   },
 
-  // SERVIÇOS: altere nome, descrição, preço e duração de cada serviço.
-  // A duração é usada para calcular os horários do agendamento.
+  // ============================================================
+  // SERVIÇOS, PREÇOS E DURAÇÕES
+  // ============================================================
+  // ALTERE AQUI os serviços de cada cliente.
+  // - nome: nome do serviço exibido no site.
+  // - descricao: descrição exibida no card.
+  // - preco: preço exibido no site.
+  // - duracao: duração usada no cálculo do agendamento.
+  // ============================================================
   servicos: [
     {
       nome: "Corte Masculino",
