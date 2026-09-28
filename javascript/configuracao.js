@@ -160,3 +160,14 @@ galeria: [
     { src: "recursos/imagens/galeria/galeria-06.svg", alt: "Resultado do atendimento" }
   ]
 };
+
+// ============================================================
+// APLICAÇÃO IMEDIATA DAS CORES
+// Mantém a identidade visual configurada antes do CSS ser exibido,
+// evitando o efeito de uma cor aparecer e depois voltar ao padrão.
+// ============================================================
+if (typeof document !== "undefined") {
+  const coresConfiguradas = CONFIG.cores || {};
+  document.documentElement.style.setProperty("--primary-color", coresConfiguradas.primaria || "#c9a66b");
+  document.documentElement.style.setProperty("--secondary-color", coresConfiguradas.secundaria || "#f4f1eb");
+}
