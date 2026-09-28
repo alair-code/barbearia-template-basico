@@ -2,6 +2,10 @@
   "use strict";
 
   const config = CONFIG;
+
+  if (config.heroImage) {
+    document.documentElement.style.setProperty("--hero-image", `url("${config.heroImage.replace(/"/g, "\\\"")}")`);
+  }
   const whatsappUrl = "https://wa.me/" + String(config.whatsapp).replace(/\D/g, "") +
     "?text=" + encodeURIComponent(config.whatsappMensagem);
 
