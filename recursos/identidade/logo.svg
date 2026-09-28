@@ -1,5 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Barbearia Básico">
-  <rect width="64" height="64" rx="16" fill="#c9a66b"/>
-  <path d="M18 19h28v7H18zm5 12h18v14H23z" fill="#111"/>
-  <path d="M29 31v14M35 31v14" stroke="#c9a66b" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Logo da barbearia">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e4c58c"/>
+      <stop offset="1" stop-color="#b78d4f"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="24" fill="#111"/>
+  <circle cx="48" cy="48" r="36" fill="none" stroke="url(#gold)" stroke-width="2.5"/>
+  <path d="M39 25v46M57 25v46" stroke="#f4f1eb" stroke-width="3" stroke-linecap="round"/>
+  <path d="M39 25c9 7 18 7 18 0M39 71c9-7 18-7 18 0" fill="none" stroke="#c9a66b" stroke-width="2"/>
+  <path d="M33 34c5-4 10-4 15 0M48 34c5-4 10-4 15 0M33 62c5 4 10 4 15 0M48 62c5 4 10 4 15 0" fill="none" stroke="#c9a66b" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M34 48h28" stroke="#f4f1eb" stroke-width="2" stroke-linecap="round"/>
 </svg>
