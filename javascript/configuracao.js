@@ -53,7 +53,7 @@ const CONFIG = {
   // CAPA: imagem principal do topo.
   // Coloque a foto do cliente em recursos/imagens/capa/.
   // Informe SOMENTE o nome do arquivo aqui.
-  // Exemplo: heroImage: "hero.jpg"
+  // Exemplo: heroImage: "hero.svg"
   // Também aceita uma URL completa (https://...).
   heroImage: "hero.svg",
   // WHATSAPP: número com código do país, somente números. Ex.: 5533999999999.
