@@ -33,7 +33,7 @@ barbearia-basico/
 
 ## Personalização rápida
 
-A maior parte da personalização fica em **`javascript/configuracao.js`**.
+A personalização principal fica em **`javascript/configuracao.js`**, incluindo identidade, SEO, cores, textos, serviços, contatos e imagens.
 
 ### Nome e descrição
 
@@ -74,19 +74,20 @@ Edite o array `servicos` para trocar nomes, descrições, preços e duração.
 
 ### Imagens
 
-As imagens da galeria ficam em **`recursos/imagens/`**. Para substituir uma imagem, mantenha o caminho e o formato definido em `configuracao.js`, ou atualize o campo `src`.
-
-As imagens incluídas são SVG locais de demonstração para manter o template independente de bancos de imagens externos. Substitua-as pelas fotos reais do cliente antes da entrega comercial.
+As imagens da galeria são definidas no array `galeria` de **`javascript/configuracao.js`**. Para uma entrega comercial, prefira baixar as fotos autorizadas do cliente para **`recursos/imagens/`** e usar caminhos locais, por exemplo `recursos/imagens/galeria-01.jpg`. Isso evita dependências externas e melhora a previsibilidade do site.
 
 ### Identidade visual
 
 - `recursos/identidade/logo.svg`
 - `recursos/identidade/favicon.svg`
+- Cores principais em `CONFIG.cores`
+- Imagem da capa em `CONFIG.heroImage`
+- Imagem de compartilhamento em `CONFIG.ogImage`
 - `estilos/style.css`
 
 ## Executar localmente
 
-Não é necessário servidor ou banco de dados para editar o template. Para uma prévia simples, abra `index.html` no navegador.
+Não é necessário servidor ou banco de dados para editar o template. Para testar corretamente recursos locais e externos, prefira um servidor HTTP simples. Abrir diretamente como `file://` pode gerar restrições de segurança no navegador. Use, por exemplo, `python3 -m http.server 5500` e acesse `http://localhost:5500`.
 
 Para validar a sintaxe JavaScript com Node.js:
 
@@ -140,4 +141,5 @@ Esses recursos pertencem a uma solução mais completa/premium e não fazem part
 - [ ] Testar WhatsApp, Instagram e Google Maps.
 - [ ] Testar em celular, tablet e desktop.
 - [ ] Executar `npm run check`.
-- [ ] Revisar título, descrição e imagem de compartilhamento.
+- [ ] Revisar título, descrição, imagem de compartilhamento e cores.
+- [ ] Se possível, substituir imagens externas por arquivos locais autorizados.
