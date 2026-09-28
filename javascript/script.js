@@ -21,6 +21,10 @@
   if (logo && config.logo) {
     logo.src = config.logo;
   }
+  const favicon = document.querySelector('link[rel="icon"]');
+  if (favicon && config.favicon) {
+    favicon.href = config.favicon;
+  }
   setText("descricao", config.descricao);
   setText("heroTitle", config.heroTitle);
   setText("instagram", config.instagram);
