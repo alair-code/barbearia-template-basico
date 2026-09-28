@@ -67,8 +67,8 @@ button { font: inherit; }
 .section { padding: 100px 0; }
 .trust-strip { background: #0e0e0e; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-.trust-grid > div { min-height: 105px; padding: 24px 22px; display: flex; flex-direction: column; justify-content: center; gap: 3px; border-right: 1px solid var(--border); }
-.trust-grid > div:first-child { border-left: 1px solid var(--border); }
+.trust-grid > div { min-height: 105px; padding: 24px 22px; display: flex; flex-direction: column; justify-content: center; gap: 3px; border-right: 0; }
+.trust-grid > div:first-child { border-left: 0; }
 .trust-grid strong { font-size: .72rem; letter-spacing: .12em; color: var(--accent); }
 .trust-grid span { color: #8e8b85; font-size: .86rem; }
 .differentials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
