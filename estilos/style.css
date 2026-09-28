@@ -118,8 +118,16 @@ button { font: inherit; }
 .map-link { display: inline-block; margin-top: 22px; color: var(--accent); font-weight: 800; text-decoration: none; }
 .site-footer { padding: 28px 0; background: #090909; color: #777; font-size: .82rem; }
 .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+.footer-links { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px 16px; }
 .footer-inner a { color: #aaa; text-decoration: none; }
+.footer-links a { font-size: .78rem; }
 .footer-inner a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.legal-modal { position: fixed; inset: 0; z-index: 98; display: none; place-items: center; padding: 20px; background: rgba(0,0,0,.84); }
+.legal-modal.is-open { display: grid; }
+.legal-panel { position: relative; width: min(100%, 720px); max-height: min(88vh, 760px); overflow: auto; padding: 34px; border: 1px solid rgba(201,166,107,.35); border-radius: 22px; background: #111; color: var(--text); box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.legal-panel h2 { margin: 0 0 22px; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; letter-spacing: -.045em; }
+.legal-content p { margin: 0 0 18px; color: #c4c0b8; line-height: 1.75; white-space: pre-line; }
+.legal-close { position: absolute; top: 14px; right: 18px; border: 0; background: transparent; color: #fff; font-size: 2rem; line-height: 1; cursor: pointer; }
 .whatsapp-float { position: fixed; right: 22px; bottom: 22px; z-index: 40; width: 60px; height: 60px; display: grid; place-items: center; border-radius: 50%; background: #25d366; color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(0,0,0,.28), inset 0 -2px 0 rgba(0,0,0,.08); transition: transform .2s ease, box-shadow .2s ease; animation: whatsapp-pulse 2.8s ease-in-out infinite; }
 .whatsapp-float:hover { transform: scale(1.07); box-shadow: 0 14px 30px rgba(0,0,0,.32), inset 0 -2px 0 rgba(0,0,0,.08); animation-play-state: paused; }
 .whatsapp-float svg { width: 35px; height: 35px; display: block; fill: currentColor; }
@@ -210,6 +218,8 @@ button { font: inherit; }
   .gallery-item, .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: span 6; }
   .contact-item { grid-template-columns: 90px 1fr; }
   .footer-inner { flex-direction: column; }
+  .footer-links { justify-content: flex-start; }
+  .legal-panel { padding: 28px 22px; }
 }
 @media (max-width: 480px) {
   .container { width: min(calc(100% - 22px), var(--container)); }
@@ -227,6 +237,7 @@ button { font: inherit; }
   .contact-item { grid-template-columns: 1fr; gap: 5px; }
   .cta-panel { padding: 26px 20px; }
   .booking-panel { padding: 24px 18px; }
+  .legal-panel { padding: 24px 18px; }
   .booking-panel h2 { font-size: clamp(1.8rem, 10vw, 2.6rem); }
   .hero-actions { align-items: stretch; flex-direction: column; }
   .hero-actions .button { width: 100%; }
