@@ -56,7 +56,7 @@ const CONFIG = {
       cnpj: "",
       termos: {
         titulo: "Termos de Uso",
-        texto: "Este site apresenta informações, serviços e canais de contato do estabelecimento. O uso das informações e dos serviços deve respeitar as condições e orientações fornecidas pelo próprio estabelecimento. Os dados exibidos neste template são de responsabilidade do estabelecimento que utiliza o site.\n\nAntes da publicação definitiva, recomenda-se revisar este texto e adequá-lo às atividades, condições comerciais e obrigações legais do estabelecimento.",
+        texto: "Este site apresenta informações, serviços e canais de contato do estabelecimento. O uso das informações e dos serviços deve respeitar as condições e orientações fornecidas pelo próprio estabelecimento. Os dados exibidos neste site são de responsabilidade do estabelecimento que utiliza o site.\n\nAntes da publicação definitiva, recomenda-se revisar este texto e adequá-lo às atividades, condições comerciais e obrigações legais do estabelecimento.",
         url: "#termos"
       },
       privacidade: {
@@ -66,7 +66,7 @@ const CONFIG = {
       },
       avisoLegal: {
         titulo: "Aviso Legal",
-        texto: "As informações, preços, horários, serviços, imagens e demais conteúdos deste site devem ser mantidos atualizados pelo estabelecimento responsável. A contratação de serviços, disponibilidade de horários e condições de atendimento dependem das informações confirmadas pelo estabelecimento.\n\nO conteúdo jurídico deste template é uma base informativa e não substitui a análise de um profissional jurídico para a situação específica do estabelecimento.",
+        texto: "As informações, preços, horários, serviços, imagens e demais conteúdos deste site devem ser mantidos atualizados pelo estabelecimento responsável. A contratação de serviços, disponibilidade de horários e condições de atendimento dependem das informações confirmadas pelo estabelecimento.\n\nO conteúdo jurídico deste site é uma base informativa e não substitui a análise de um profissional jurídico para a situação específica do estabelecimento.",
         url: "#aviso-legal"
       }
     }
