@@ -7,10 +7,10 @@ const CONFIG = {
   logo: "recursos/identidade/logo.svg",
   // Favicon padrão — substitua pelo favicon real do cliente quando ele enviar.
   favicon: "recursos/identidade/favicon.svg",
-  descricao: "Barbearia profissional para quem valoriza estilo, cuidado e qualidade.",
-  heroTitle: "Seu estilo começa aqui.",
-  seoTitle: "Barbearia Básico | Seu estilo começa aqui.",
-  seoDescription: "Conheça nossos serviços, veja nosso trabalho e agende seu horário pelo WhatsApp.",
+  descricao: "Seu visual, seu estilo, sua melhor versão. Um atendimento pensado para você sair satisfeito e voltar quando quiser.",
+  heroTitle: "Seu próximo visual começa aqui.",
+  seoTitle: "Barbearia Básico | Seu próximo visual começa aqui.",
+  seoDescription: "Conheça nossos serviços, veja nossos resultados e escolha seu próximo visual. Agende seu horário pelo WhatsApp.",
   // Para compartilhamento social, prefira uma imagem JPG/PNG local ou uma URL absoluta.
   ogImage: "recursos/identidade/logo.svg",
   cores: {
@@ -22,21 +22,21 @@ const CONFIG = {
     textoSuave: "#aaa7a0"
   },
   sobre: {
-    titulo: "Mais do que um corte, uma experiência.",
+    titulo: "Mais do que cuidar do visual, é cuidar de você.",
     textos: [
-      "Um espaço pensado para quem gosta de se cuidar, renovar o visual e sair satisfeito.",
-      "Atendimento próximo, ambiente confortável e serviços feitos com atenção aos detalhes."
+      "Um espaço para quem valoriza um bom visual, gosta de se cuidar e quer se sentir bem com o resultado.",
+      "Cada atendimento é uma oportunidade de renovar a aparência, elevar a confiança e sair pronto para a próxima."
     ]
   },
   diferenciais: [
-    { titulo: "Atendimento personalizado", descricao: "Cada serviço pensado para valorizar seu estilo." },
-    { titulo: "Cuidado nos detalhes", descricao: "Acabamento preciso do início ao resultado final." },
-    { titulo: "Praticidade", descricao: "Fale pelo WhatsApp e combine seu horário com facilidade." }
+    { titulo: "Seu estilo em primeiro lugar", descricao: "O serviço é adaptado para valorizar o visual que combina com você." },
+    { titulo: "Detalhes que fazem diferença", descricao: "Do primeiro toque ao acabamento, cada detalhe contribui para um resultado bem cuidado." },
+    { titulo: "Agendamento simples", descricao: "Escolha seu serviço, encontre um horário e envie seu pedido pelo WhatsApp." }
   ],
-  ctaTitulo: "Gostou de algum serviço?",
-  ctaDescricao: "Chame no WhatsApp e combine seu próximo horário.",
-  localTitulo: "Visite a barbearia",
-  localDescricao: "Confira o endereço, horário de atendimento e como chegar.",
+  ctaTitulo: "Seu próximo visual pode começar agora.",
+  ctaDescricao: "Escolha o serviço que você procura e reserve alguns minutos para cuidar do seu visual.",
+  localTitulo: "Venha viver a experiência.",
+  localDescricao: "Confira onde estamos, nossos horários e escolha o melhor momento para sua próxima visita.",
   footer: {
     texto: "Todos os direitos reservados.",
     credito: "Desenvolvido com profissionalismo.",
@@ -45,7 +45,7 @@ const CONFIG = {
 
   heroImage: "https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2400",
   whatsapp: "5500000000000",
-  whatsappMensagem: "Olá! Gostaria de agendar um horário na barbearia.",
+  whatsappMensagem: "Olá! Gostaria de agendar meu próximo horário na barbearia.",
   instagram: "@barbearia",
   instagramUrl: "https://instagram.com/",
   endereco: "Rua Exemplo, 123 — Centro",
