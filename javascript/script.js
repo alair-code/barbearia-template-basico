@@ -1,48 +1,13 @@
 (() => {
   "use strict";
 
-  // ============================================================
-  // INICIALIZAÇÃO
-  // ============================================================
-  // O CONFIG vem de javascript/configuracao.js.
-  // Para personalizar o cliente, prefira alterar configuracao.js
-  // e o início de estilos/style.css, sem mexer nesta lógica.
   const config = CONFIG;
+  const BOOKINGS_STORAGE_KEY = "barbearia-agendamentos";
 
   // ============================================================
-  // SEO E IMAGEM PRINCIPAL
+  // HELPERS
   // ============================================================
-  // Atualiza título, descrição e imagem usados pelo navegador e
-  // pelos compartilhamentos sociais.
-  // TÍTULO SEO
-  // TÍTULO DO COMPARTILHAMENTO
-  if (config.seoTitle) {
-    document.title = config.seoTitle;
-    const titleMeta = document.querySelector('[data-meta-config="title"]');
-    if (titleMeta) titleMeta.textContent = config.seoTitle;
-  }
-  // DESCRIÇÃO SEO
-  if (config.seoDescription) {
-    const descriptionMeta = document.querySelector('[data-meta-config="description"]');
-    if (descriptionMeta) descriptionMeta.setAttribute("content", config.seoDescription);
-    const ogDescription = document.querySelector('[data-meta-config="og:description"]');
-    if (ogDescription) ogDescription.setAttribute("content", config.seoDescription);
-  }
-  if (config.seoTitle) {
-    const ogTitle = document.querySelector('[data-meta-config="og:title"]');
-    if (ogTitle) ogTitle.setAttribute("content", config.seoTitle);
-  }
-  // IMAGEM DO COMPARTILHAMENTO
-  if (config.ogImage) {
-    const ogImage = document.querySelector('[data-meta-config="og:image"]');
-    if (ogImage) ogImage.setAttribute("content", config.ogImage);
-  }
-
-  // ============================================================
-  // AGENDAMENTO PELO WHATSAPP
-  // ============================================================
-  // Esta parte calcula horários conforme o dia, expediente e duração do serviço.
-  const whatsappNumber = String(config.whatsapp).replace(/\D/g, "");
+  const whatsappNumber = String(config.whatsapp || "").replace(/\D/g, "");
   const bookingModal = document.querySelector("#booking-modal");
   const bookingForm = document.querySelector("#booking-form");
   const bookingName = document.querySelector("#booking-name");
@@ -55,53 +20,32 @@
   const bookingDateActions = document.querySelectorAll("[data-booking-date-action]");
   let activeBookingTrigger = null;
 
-  // Converte a data atual para YYYY-MM-DD usando o horário local.
   const todayIso = () => {
     const now = new Date();
     const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     return local.toISOString().slice(0, 10);
   };
 
-  // Converte "09:30" em minutos para facilitar os cálculos.
+  const addDaysToIso = (isoDate, days) => {
+    const [year, month, day] = String(isoDate).split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + days);
+    return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
+  };
+
   const minutesFromTime = (time) => {
     const [hours, minutes] = String(time).split(":").map(Number);
     return (hours * 60) + minutes;
   };
 
-  // Formata a data para a mensagem enviada ao barbeiro.
+  const timeFromMinutes = (minutes) => {
+    return String(Math.floor(minutes / 60)).padStart(2, "0") + ":" + String(minutes % 60).padStart(2, "0");
+  };
+
   const formatDate = (isoDate) => {
     const [year, month, day] = isoDate.split("-").map(Number);
     return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
       .format(new Date(year, month - 1, day));
-  };
-
-  // Lê a duração configurada no serviço selecionado.
-  const getServiceDuration = () => {
-    if (!bookingService) return 30;
-    const service = config.servicos?.find((item) => item.nome === bookingService.value);
-    const match = String(service?.duracao || "").match(/\d+/);
-    return match ? Number(match[0]) : 30;
-  };
-
-  // Busca o horário de funcionamento correspondente à data escolhida.
-  const getSchedule = (isoDate) => {
-    if (!isoDate) return null;
-    const [year, month, day] = isoDate.split("-").map(Number);
-    const date = new Date(year, month - 1, day);
-    return config.funcionamento?.[date.getDay()] || null;
-  };
-
-  // Procura o próximo dia em que a barbearia funciona.
-  const findNextOpenDate = (fromDate) => {
-    if (!fromDate) return null;
-    const [year, month, day] = fromDate.split("-").map(Number);
-    const cursor = new Date(year, month - 1, day);
-    for (let offset = 1; offset <= 31; offset += 1) {
-      cursor.setDate(cursor.getDate() + 1);
-      const iso = [cursor.getFullYear(), String(cursor.getMonth() + 1).padStart(2, "0"), String(cursor.getDate()).padStart(2, "0")].join("-");
-      if (getSchedule(iso)) return iso;
-    }
-    return null;
   };
 
   const formatBookingDateLabel = (isoDate) => {
@@ -115,6 +59,85 @@
     }).format(new Date(year, month - 1, day));
   };
 
+  const getSchedule = (isoDate) => {
+    if (!isoDate) return null;
+    const [year, month, day] = isoDate.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return config.funcionamento?.[date.getDay()] || null;
+  };
+
+  const getService = (name) => config.servicos?.find((item) => item.nome === name) || null;
+
+  const getServiceDuration = (service) => {
+    const match = String(service?.duracao || "").match(/\d+/);
+    const duration = match ? Number(match[0]) : NaN;
+    return Number.isFinite(duration) && duration > 0 ? duration : null;
+  };
+
+  const readBookings = () => {
+    try {
+      const stored = localStorage.getItem(BOOKINGS_STORAGE_KEY);
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeBookings = (bookings) => {
+    localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookings));
+  };
+
+  const getBookingInterval = (booking) => {
+    const service = getService(booking.servico);
+    const duration = getServiceDuration(service) || Number(booking.duracaoMinutos);
+    if (!booking.data || !booking.horario || !duration) return null;
+    const start = minutesFromTime(booking.horario);
+    return { start, end: start + duration };
+  };
+
+  const hasConflict = (date, start, duration, ignoreId = null) => {
+    const newEnd = start + duration;
+    return readBookings().some((booking) => {
+      if (booking.data !== date || booking.id === ignoreId) return false;
+      const interval = getBookingInterval(booking);
+      if (!interval) return false;
+      return start < interval.end && newEnd > interval.start;
+    });
+  };
+
+  const isBookingSlotValid = (date, time, service) => {
+    const schedule = getSchedule(date);
+    const duration = getServiceDuration(service);
+    if (!schedule || !service || !duration || !time) return false;
+
+    const start = minutesFromTime(time);
+    const opening = minutesFromTime(schedule.abertura);
+    const closing = minutesFromTime(schedule.fechamento);
+
+    if (!Number.isFinite(start) || start < opening || start + duration > closing) return false;
+    if (start % 10 !== 0) return false;
+
+    if (date === todayIso()) {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      if (start <= currentMinutes) return false;
+    }
+
+    return !hasConflict(date, start, duration);
+  };
+
+  const findNextOpenDate = (fromDate) => {
+    if (!fromDate) return null;
+    let cursor = fromDate;
+    for (let offset = 1; offset <= 366; offset += 1) {
+      cursor = addDaysToIso(cursor, 1);
+      if (getSchedule(cursor)) return cursor;
+    }
+    return null;
+  };
+
   const setBookingDateContext = (isoDate) => {
     if (!bookingDateContext) return;
     bookingDateContext.textContent = isoDate
@@ -122,13 +145,12 @@
       : "Escolha o dia do atendimento. Os horários serão calculados para a data selecionada.";
   };
 
-
-  // Mostra uma ação clara para continuar o agendamento em outro dia.
   const showNextDateOption = (fromDate) => {
     const existing = bookingStatus?.parentElement?.querySelector(".booking-next-day");
     existing?.remove();
     const nextDate = findNextOpenDate(fromDate);
     if (!bookingStatus || !nextDate) return;
+
     const button = document.createElement("button");
     button.type = "button";
     button.className = "booking-next-day";
@@ -141,9 +163,62 @@
     bookingStatus.insertAdjacentElement("afterend", button);
   };
 
-  // Recalcula a lista de horários sempre que serviço ou data mudar.
+  // ============================================================
+  // RESUMO DO AGENDAMENTO
+  // ============================================================
+  let bookingSummary = document.querySelector("#booking-summary");
+  if (!bookingSummary && bookingForm) {
+    bookingSummary = document.createElement("div");
+    bookingSummary.id = "booking-summary";
+    bookingSummary.className = "booking-summary";
+    bookingSummary.setAttribute("aria-live", "polite");
+    bookingSummary.innerHTML = "<strong>Resumo do agendamento</strong><div class=\"booking-summary-content\"></div>";
+    bookingForm.querySelector("button[type=\"submit\"]")?.before(bookingSummary);
+  }
+
+  const updateBookingSummary = () => {
+    if (!bookingSummary) return;
+    const content = bookingSummary.querySelector(".booking-summary-content");
+    if (!content) return;
+
+    const service = getService(bookingService?.value);
+    const date = bookingDate?.value;
+    const time = bookingTime?.value;
+    const complete = service && date && time;
+
+    if (!complete) {
+      bookingSummary.classList.remove("is-ready");
+      content.textContent = "Selecione serviço, data e horário para visualizar o resumo.";
+      return;
+    }
+
+    const duration = getServiceDuration(service);
+    content.innerHTML = "";
+    [
+      ["Serviço", service.nome],
+      ["Preço", service.preco || "Consultar"],
+      ["Duração", duration ? duration + " min" : service.duracao || "Consultar"],
+      ["Data", formatDate(date)],
+      ["Horário", time]
+    ].forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.className = "booking-summary-row";
+      const key = document.createElement("span");
+      key.textContent = label;
+      const val = document.createElement("strong");
+      val.textContent = value;
+      row.append(key, val);
+      content.appendChild(row);
+    });
+    bookingSummary.classList.add("is-ready");
+  };
+
+  // ============================================================
+  // HORÁRIOS
+  // ============================================================
   const updateBookingTimes = () => {
     if (!bookingDate || !bookingTime || !bookingStatus) return;
+
     const selectedDate = bookingDate.value;
     setBookingDateContext(selectedDate);
     const schedule = getSchedule(selectedDate);
@@ -152,32 +227,29 @@
 
     if (!selectedDate) {
       bookingTime.disabled = true;
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "Selecione uma data primeiro";
-      bookingTime.appendChild(option);
-      bookingStatus.textContent = "Selecione uma data para ver os horários disponíveis.";
+      bookingTime.append(new Option("Selecione uma data primeiro", ""));
+      bookingStatus.textContent = "Escolha a data para ver os horários disponíveis.";
+      updateBookingSummary();
       return;
     }
 
     if (!schedule) {
       bookingTime.disabled = true;
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "Barbearia fechada neste dia";
-      bookingTime.appendChild(option);
+      bookingTime.append(new Option("Barbearia fechada neste dia", ""));
       bookingStatus.textContent = "A barbearia não funciona nesta data. Escolha outro dia.";
       showNextDateOption(selectedDate);
+      updateBookingSummary();
       return;
     }
 
-    if (!bookingService?.value) {
+    const service = getService(bookingService?.value);
+    const duration = getServiceDuration(service);
+
+    if (!service || !duration) {
       bookingTime.disabled = true;
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "Selecione um serviço primeiro";
-      bookingTime.appendChild(option);
-      bookingStatus.textContent = "Escolha o serviço para calcular os horários disponíveis.";
+      bookingTime.append(new Option("Selecione um serviço primeiro", ""));
+      bookingStatus.textContent = "Escolha um serviço para ver os horários.";
+      updateBookingSummary();
       return;
     }
 
@@ -186,75 +258,67 @@
     const selectedIsToday = selectedDate === todayIso();
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const serviceDuration = getServiceDuration();
     const slots = [];
 
-    for (let start = opening; start + serviceDuration <= closing; start += 10) {
+    for (let start = opening; start + duration <= closing; start += 10) {
       if (selectedIsToday && start <= currentMinutes) continue;
-      const hours = String(Math.floor(start / 60)).padStart(2, "0");
-      const minutes = String(start % 60).padStart(2, "0");
-      slots.push(hours + ":" + minutes);
+      if (hasConflict(selectedDate, start, duration)) continue;
+      slots.push(timeFromMinutes(start));
     }
 
     if (!slots.length) {
       bookingTime.disabled = true;
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "Nenhum horário disponível";
-      bookingTime.appendChild(option);
+      bookingTime.append(new Option("Nenhum horário disponível", ""));
       bookingStatus.textContent = selectedIsToday
-        ? "Não há mais horários disponíveis hoje. Escolha outra data para agendar."
-        : "Não há horários disponíveis nesta data. Escolha outra data para agendar.";
+        ? "Não há mais horários disponíveis hoje. Escolha outra data."
+        : "Não há horários disponíveis nesta data. Escolha outra data.";
       showNextDateOption(selectedDate);
+      updateBookingSummary();
       return;
     }
 
     bookingTime.disabled = false;
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "Selecione um horário";
-    bookingTime.appendChild(placeholder);
-    slots.forEach((slot) => {
-      const option = document.createElement("option");
-      option.value = slot;
-      option.textContent = slot;
-      bookingTime.appendChild(option);
-    });
-    bookingStatus.textContent = "Horários disponíveis para " + formatBookingDateLabel(selectedDate) + ": " + schedule.abertura + " às " + schedule.fechamento + ".";
+    bookingTime.append(new Option("Selecione um horário", ""));
+    slots.forEach((slot) => bookingTime.append(new Option(slot, slot)));
+    bookingStatus.textContent = "Horários disponíveis: " + schedule.abertura + " às " + schedule.fechamento + ".";
+    updateBookingSummary();
   };
 
-  // Abre o formulário de agendamento e preenche os serviços disponíveis.
-  const openBooking = (trigger) => {
+  // ============================================================
+  // MODAL
+  // ============================================================
+  const populateServices = (selectedService = "") => {
+    if (!bookingService) return;
+    bookingService.replaceChildren(new Option("Selecione um serviço", ""));
+    if (Array.isArray(config.servicos)) {
+      config.servicos.forEach((service) => {
+        const label = service.nome + (service.duracao ? " — " + service.duracao : "");
+        bookingService.append(new Option(label, service.nome));
+      });
+    }
+    if (selectedService && getService(selectedService)) bookingService.value = selectedService;
+  };
+
+  const openBooking = (trigger, selectedService = "") => {
     if (!bookingModal) return;
     activeBookingTrigger = trigger || null;
     bookingModal.classList.add("is-open");
     bookingModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("no-scroll");
-    if (bookingService) {
-      bookingService.replaceChildren();
-      const placeholder = document.createElement("option");
-      placeholder.value = "";
-      placeholder.textContent = "Selecione um serviço";
-      bookingService.appendChild(placeholder);
-      if (Array.isArray(config.servicos)) {
-        config.servicos.forEach((service) => {
-          const option = document.createElement("option");
-          option.value = service.nome;
-          option.textContent = service.nome + (service.duracao ? " — " + service.duracao : "");
-          bookingService.appendChild(option);
-        });
-      }
-    }
+
+    populateServices(selectedService);
+
     if (bookingDate) {
       bookingDate.min = todayIso();
       if (!bookingDate.value || bookingDate.value < bookingDate.min) bookingDate.value = bookingDate.min;
-      updateBookingTimes();
     }
-    setBookingDateContext(bookingDate?.value || "");
+
+    if (bookingTime) bookingTime.value = "";
+    updateBookingTimes();
+    updateBookingSummary();
     bookingName?.focus();
   };
 
-  // Fecha o formulário e devolve o foco ao botão que abriu a janela.
   const closeBooking = () => {
     if (!bookingModal) return;
     bookingModal.classList.remove("is-open");
@@ -266,7 +330,6 @@
     }
   };
 
-  // Mantém a navegação pelo teclado dentro das janelas abertas.
   const trapFocus = (modal, event) => {
     if (event.key !== "Tab" || !modal?.classList.contains("is-open")) return false;
     const focusable = Array.from(modal.querySelectorAll(
@@ -288,8 +351,9 @@
     return false;
   };
 
-  if (bookingDate) bookingDate.addEventListener("change", updateBookingTimes);
-  if (bookingService) bookingService.addEventListener("change", updateBookingTimes);
+  bookingDate?.addEventListener("change", updateBookingTimes);
+  bookingService?.addEventListener("change", updateBookingTimes);
+  bookingTime?.addEventListener("change", updateBookingSummary);
 
   bookingDateActions.forEach((button) => {
     button.addEventListener("click", () => {
@@ -298,77 +362,37 @@
       const today = todayIso();
       let targetDate = today;
 
-      if (action === "tomorrow") {
-        targetDate = addDaysToIso(today, 1);
-      } else if (action === "next") {
-        targetDate = findNextOpenDate(today) || today;
-      }
+      if (action === "tomorrow") targetDate = addDaysToIso(today, 1);
+      if (action === "next") targetDate = findNextOpenDate(today) || today;
 
       bookingDate.value = targetDate;
       updateBookingTimes();
       bookingDate.focus();
     });
   });
-  if (bookingClose) bookingClose.addEventListener("click", closeBooking);
-  if (bookingModal) {
-    bookingModal.addEventListener("click", (event) => {
-      if (event.target === bookingModal) closeBooking();
-    });
-  }
 
-  // Confere novamente o horário antes de enviar, evitando seleções inválidas.
-  const isBookingSlotValid = (date, time, service) => {
-    const schedule = getSchedule(date);
-    if (!schedule || !service || !time) return false;
-    const start = minutesFromTime(time);
-    const opening = minutesFromTime(schedule.abertura);
-    const closing = minutesFromTime(schedule.fechamento);
-    const match = String(service.duracao || "").match(/\d+/);
-    const duration = match ? Number(match[0]) : 30;
-    if (!Number.isFinite(start) || !Number.isFinite(duration)) return false;
-    if (start < opening || start + duration > closing) return false;
-    if (date === todayIso()) {
-      const now = new Date();
-      if (start <= now.getHours() * 60 + now.getMinutes()) return false;
-    }
-    return start % 10 === 0;
-  };
-
-  // Envia nome, serviço, data e horário para o WhatsApp.
-  if (bookingForm) {
-    bookingForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const name = bookingName?.value.trim();
-      const date = bookingDate?.value;
-      const time = bookingTime?.value;
-      const serviceName = bookingService?.value;
-      const service = config.servicos?.find((item) => item.nome === serviceName);
-      const schedule = getSchedule(date);
-
-      if (!name || !date || !time || !serviceName || !service || !schedule || date < todayIso() || !isBookingSlotValid(date, time, service)) {
-        bookingStatus.textContent = "Revise o serviço, a data e o horário selecionados.";
-        return;
-      }
-
-      const message = [
-        config.whatsappMensagem || "Olá! Gostaria de agendar um horário na barbearia.",
-        "",
-        "Nome: " + name,
-        "Serviço: " + service.nome,
-        "Data: " + formatDate(date),
-        "Horário: " + time
-      ].join("\n");
-
-      const whatsappUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
-      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-      closeBooking();
-    });
-  }
+  bookingClose?.addEventListener("click", closeBooking);
+  bookingModal?.addEventListener("click", (event) => {
+    if (event.target === bookingModal) closeBooking();
+  });
 
   // ============================================================
-  // APLICAÇÃO DOS DADOS CONFIGURÁVEIS
+  // SEO
   // ============================================================
-  // Os elementos com data-config recebem os valores de configuracao.js.
+  if (config.seoTitle) {
+    document.title = config.seoTitle;
+    document.querySelector('[data-meta-config="title"]')?.replaceChildren(document.createTextNode(config.seoTitle));
+    document.querySelector('[data-meta-config="og:title"]')?.setAttribute("content", config.seoTitle);
+  }
+  if (config.seoDescription) {
+    document.querySelector('[data-meta-config="description"]')?.setAttribute("content", config.seoDescription);
+    document.querySelector('[data-meta-config="og:description"]')?.setAttribute("content", config.seoDescription);
+  }
+  if (config.ogImage) document.querySelector('[data-meta-config="og:image"]')?.setAttribute("content", config.ogImage);
+
+  // ============================================================
+  // DADOS CONFIGURÁVEIS
+  // ============================================================
   const setText = (key, value) => {
     document.querySelectorAll('[data-config="' + key + '"]').forEach((element) => {
       element.textContent = value ?? "";
@@ -379,17 +403,22 @@
   setText("descricao", config.descricao);
   setText("sobreTitulo", config.sobre?.titulo || "Mais do que um corte, uma experiência.");
   setText("heroTitle", config.heroTitle);
+  setText("ctaTitulo", config.ctaTitulo);
+  setText("ctaDescricao", config.ctaDescricao);
+  setText("localTitulo", config.localTitulo);
+  setText("localDescricao", config.localDescricao);
   setText("instagram", config.instagram);
   setText("endereco", config.endereco);
+  setText("whatsappDisplay", config.whatsapp);
+
   const dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
   const formatOperatingHours = () => {
     const groups = [];
     Object.entries(config.funcionamento || {}).forEach(([day, schedule]) => {
       if (!schedule) return;
-      const label = dayNames[Number(day)];
-      const value = label + ": " + schedule.abertura + " às " + schedule.fechamento;
       const previous = groups[groups.length - 1];
-      if (previous && previous.schedule.abertura === schedule.abertura && previous.schedule.fechamento === schedule.fechamento &&
+      if (previous && previous.schedule.abertura === schedule.abertura &&
+          previous.schedule.fechamento === schedule.fechamento &&
           Number(previous.lastDay) + 1 === Number(day)) {
         previous.lastDay = day;
       } else {
@@ -399,31 +428,25 @@
     return groups.map((group) => {
       const first = dayNames[Number(group.firstDay)];
       const last = dayNames[Number(group.lastDay)];
-      const dayLabel = first === last ? first : first + " a " + last;
-      return dayLabel + ": " + group.schedule.abertura + " às " + group.schedule.fechamento;
+      const label = first === last ? first : first + " a " + last;
+      return label + ": " + group.schedule.abertura + " às " + group.schedule.fechamento;
     }).join(" • ");
   };
   setText("horario", formatOperatingHours() || "Consulte os horários.");
-  setText("whatsappDisplay", config.whatsapp);
 
-  // LOGO E FAVICON
   const logo = document.querySelector(".brand img");
   if (logo && config.logo) logo.src = config.logo;
-
   const favicon = document.querySelector('link[rel="icon"]');
   if (favicon && config.favicon) favicon.href = config.favicon;
 
-  // RODAPÉ
   const footer = config.footer || {};
-  const footerCopyright = document.querySelector("[data-footer=\"copyright\"]");
-  const footerCredit = document.querySelector("[data-footer=\"credit\"]");
-  if (footerCopyright) {
-    footerCopyright.textContent = footer.texto || "Todos os direitos reservados.";
-  }
+  const footerCopyright = document.querySelector('[data-footer="copyright"]');
+  const footerCredit = document.querySelector('[data-footer="credit"]');
+  if (footerCopyright) footerCopyright.textContent = footer.texto || "Todos os direitos reservados.";
   if (footerCredit) {
     footerCredit.textContent = footer.credito || "";
     footerCredit.hidden = !footer.credito;
-    if (footer.creditoUrl) {
+    if (footer.creditoUrl && footer.credito) {
       const link = document.createElement("a");
       link.href = footer.creditoUrl;
       link.target = "_blank";
@@ -434,7 +457,25 @@
   }
 
   // ============================================================
-  // INFORMAÇÕES JURÍDICAS DO RODAPÉ
+  // LINKS
+  // ============================================================
+  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
+    link.href = "#agendar";
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openBooking(link);
+    });
+  });
+
+  document.querySelectorAll("[data-instagram-link]").forEach((link) => {
+    link.href = config.instagramUrl || "#";
+  });
+
+  const mapLink = document.querySelector("[data-map-link]");
+  if (mapLink) mapLink.href = config.mapaUrl || "#";
+
+  // ============================================================
+  // JURÍDICO
   // ============================================================
   const legalConfig = footer.juridico || {};
   const legalModal = document.querySelector("#legal-modal");
@@ -455,7 +496,7 @@
     activeLegalTrigger = trigger || null;
     legalTitle.textContent = section.titulo || "Informações legais";
     legalContent.replaceChildren();
-    String(section.texto || "").split(/\\n\\s*\\n/).filter(Boolean).forEach((paragraph) => {
+    String(section.texto || "").split(/\n\s*\n|\n{2,}/).filter(Boolean).forEach((paragraph) => {
       const p = document.createElement("p");
       p.textContent = paragraph.trim();
       legalContent.appendChild(p);
@@ -471,10 +512,8 @@
     legalModal.classList.remove("is-open");
     legalModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("no-scroll");
-    if (activeLegalTrigger) {
-      activeLegalTrigger.focus();
-      activeLegalTrigger = null;
-    }
+    activeLegalTrigger?.focus();
+    activeLegalTrigger = null;
   };
 
   document.querySelectorAll("[data-legal-link]").forEach((link) => {
@@ -491,42 +530,20 @@
     });
   });
 
-  if (!legalConfig.habilitado) {
-    document.querySelector(".footer-links")?.remove();
-  }
-  if (legalClose) legalClose.addEventListener("click", closeLegal);
-  if (legalModal) {
-    legalModal.addEventListener("click", (event) => {
-      if (event.target === legalModal) closeLegal();
-    });
-  }
-
-  // LINKS DE WHATSAPP
-  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
-    link.href = "#agendar";
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      openBooking(link);
-    });
+  if (!legalConfig.habilitado) document.querySelector(".footer-links")?.remove();
+  legalClose?.addEventListener("click", closeLegal);
+  legalModal?.addEventListener("click", (event) => {
+    if (event.target === legalModal) closeLegal();
   });
 
-  // LINK DO INSTAGRAM
-  document.querySelectorAll("[data-instagram-link]").forEach((link) => {
-    link.href = config.instagramUrl || "#";
-  });
-
-  // LINK DO GOOGLE MAPS
-  const mapLink = document.querySelector("[data-map-link]");
-  if (mapLink) mapLink.href = config.mapaUrl || "#";
-
   // ============================================================
-  // SERVIÇOS
+  // SERVIÇOS + AGENDAMENTO DIRETO
   // ============================================================
-  // Os cards são criados automaticamente a partir de CONFIG.servicos.
   const servicesList = document.querySelector("#services-list");
   if (servicesList && Array.isArray(config.servicos)) {
     const fragment = document.createDocumentFragment();
-    config.servicos.forEach((service) => {
+
+    config.servicos.forEach((service, index) => {
       const article = document.createElement("article");
       article.className = "service-card";
 
@@ -544,60 +561,32 @@
       meta.className = "service-meta";
 
       const price = document.createElement("strong");
-      price.textContent = service.preco || "";
-
+      price.textContent = service.preco || "Consultar";
       meta.appendChild(price);
+
       if (service.duracao) {
         const duration = document.createElement("span");
         duration.textContent = service.duracao;
         meta.appendChild(duration);
       }
 
-      article.append(number, title, description, meta);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "button service-booking-button";
+      button.textContent = "Agendar este serviço";
+      button.dataset.serviceName = service.nome || "";
+      button.addEventListener("click", () => openBooking(button, service.nome));
+
+      article.append(number, title, description, meta, button);
       fragment.appendChild(article);
     });
+
     servicesList.replaceChildren(fragment);
   }
 
   // ============================================================
-  // GALERIA
+  // SOBRE + DIFERENCIAIS
   // ============================================================
-  // As imagens vêm de CONFIG.galeria.
-  const galleryList = document.querySelector("#gallery-list");
-  const galleryFallback = "recursos/imagens/galeria/galeria-01.svg";
-  if (galleryList && Array.isArray(config.galeria)) {
-    const fragment = document.createDocumentFragment();
-    config.galeria.forEach((image, index) => {
-      const button = document.createElement("button");
-      button.className = "gallery-item";
-      button.type = "button";
-      button.dataset.galleryIndex = String(index);
-      button.setAttribute("aria-label", "Ampliar: " + (image.alt || "imagem"));
-
-      const img = document.createElement("img");
-      const configuredImage = String(image?.src || "").trim();
-      const imagePath = /^(https?:|data:|file:|\/)/i.test(configuredImage)
-        ? configuredImage
-        : configuredImage;
-      img.src = imagePath || galleryFallback;
-      img.alt = image.alt || "";
-      img.loading = "lazy";
-      img.decoding = "async";
-      img.referrerPolicy = "no-referrer";
-
-      button.appendChild(img);
-      fragment.appendChild(button);
-
-      img.addEventListener("error", () => {
-        if (img.dataset.fallbackApplied) return;
-        img.dataset.fallbackApplied = "true";
-        img.src = galleryFallback;
-      });
-    });
-    galleryList.replaceChildren(fragment);
-  }
-
-  // TEXTO DA SEÇÃO SOBRE
   const aboutCopy = document.querySelector("#about-copy");
   if (aboutCopy && Array.isArray(config.sobre?.textos)) {
     const fragment = document.createDocumentFragment();
@@ -609,7 +598,6 @@
     aboutCopy.replaceChildren(fragment);
   }
 
-  // DIFERENCIAIS
   const differentialsList = document.querySelector("#differentials-list");
   if (differentialsList && Array.isArray(config.diferenciais)) {
     const fragment = document.createDocumentFragment();
@@ -634,29 +622,66 @@
   }
 
   // ============================================================
-  // MENU RESPONSIVO
+  // GALERIA
+  // ============================================================
+  const galleryList = document.querySelector("#gallery-list");
+  const galleryFallback = "recursos/imagens/galeria/galeria-01.svg";
+
+  if (galleryList && Array.isArray(config.galeria)) {
+    const fragment = document.createDocumentFragment();
+
+    config.galeria.forEach((image, index) => {
+      const button = document.createElement("button");
+      button.className = "gallery-item";
+      button.type = "button";
+      button.dataset.galleryIndex = String(index);
+      button.setAttribute("aria-label", "Ampliar: " + (image.alt || "imagem"));
+
+      const img = document.createElement("img");
+      img.src = String(image?.src || "").trim() || galleryFallback;
+      img.alt = image.alt || "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+
+      button.appendChild(img);
+      fragment.appendChild(button);
+
+      img.addEventListener("error", () => {
+        if (img.dataset.fallbackApplied) return;
+        img.dataset.fallbackApplied = "true";
+        img.src = galleryFallback;
+      });
+    });
+
+    galleryList.replaceChildren(fragment);
+  }
+
+  // ============================================================
+  // MENU
   // ============================================================
   const menuToggle = document.querySelector(".menu-toggle");
   const siteMenu = document.querySelector("#site-menu");
 
   const closeMenu = (restoreFocus = false) => {
+    if (!menuToggle || !siteMenu) return;
     menuToggle.setAttribute("aria-expanded", "false");
     siteMenu.classList.remove("is-open");
     menuToggle.setAttribute("aria-label", "Abrir menu");
     if (restoreFocus) menuToggle.focus();
   };
 
-  menuToggle.addEventListener("click", () => {
+  menuToggle?.addEventListener("click", () => {
     const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
     menuToggle.setAttribute("aria-expanded", String(!isOpen));
-    siteMenu.classList.toggle("is-open", !isOpen);
+    siteMenu?.classList.toggle("is-open", !isOpen);
     menuToggle.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
   });
 
-  siteMenu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => closeMenu()));
+  siteMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => closeMenu()));
 
   // ============================================================
-  // GALERIA AMPLIADA (LIGHTBOX)
+  // LIGHTBOX
   // ============================================================
   const lightbox = document.querySelector("#lightbox");
   const lightboxImage = document.querySelector("#lightbox-image");
@@ -664,17 +689,16 @@
   let activeGalleryTrigger = null;
 
   const closeLightbox = () => {
+    if (!lightbox) return;
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
-    lightboxImage.removeAttribute("src");
+    lightboxImage?.removeAttribute("src");
     document.body.classList.remove("no-scroll");
-    if (activeGalleryTrigger) {
-      activeGalleryTrigger.focus();
-      activeGalleryTrigger = null;
-    }
+    activeGalleryTrigger?.focus();
+    activeGalleryTrigger = null;
   };
 
-  if (galleryList && lightbox) {
+  if (galleryList && lightbox && lightboxImage) {
     galleryList.addEventListener("click", (event) => {
       const button = event.target.closest("[data-gallery-index]");
       if (!button) return;
@@ -684,7 +708,7 @@
 
       activeGalleryTrigger = button;
       lightboxImage.src = thumbnail?.currentSrc || thumbnail?.src || image.src;
-      lightboxImage.alt = image.alt;
+      lightboxImage.alt = image.alt || "";
       lightboxImage.onerror = () => {
         lightboxImage.onerror = null;
         lightboxImage.src = galleryFallback;
@@ -692,38 +716,121 @@
       lightbox.classList.add("is-open");
       lightbox.setAttribute("aria-hidden", "false");
       document.body.classList.add("no-scroll");
-      closeLightboxButton.focus();
+      closeLightboxButton?.focus();
     });
   }
 
-  closeLightboxButton.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (event) => {
+  closeLightboxButton?.addEventListener("click", closeLightbox);
+  lightbox?.addEventListener("click", (event) => {
     if (event.target === lightbox) closeLightbox();
   });
 
-  // TECLADO: ESC fecha janelas abertas e o menu; TAB permanece dentro das janelas.
+  // ============================================================
+  // ENVIO + DUPLA VALIDAÇÃO + LOCALSTORAGE
+  // ============================================================
+  bookingForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const name = bookingName?.value.trim();
+    const date = bookingDate?.value;
+    const time = bookingTime?.value;
+    const serviceName = bookingService?.value;
+    const service = getService(serviceName);
+    const schedule = getSchedule(date);
+    const duration = getServiceDuration(service);
+
+    if (!name || !date || !time || !serviceName || !service || !schedule || !duration || date < todayIso()) {
+      bookingStatus.textContent = "Revise o nome, serviço, data e horário selecionados.";
+      updateBookingSummary();
+      return;
+    }
+
+    // Validação final: expediente, duração, horário passado e conflito.
+    if (!isBookingSlotValid(date, time, service)) {
+      bookingStatus.textContent = "Esse horário acabou de ser reservado. Escolha outro horário.";
+      updateBookingTimes();
+      return;
+    }
+
+    const booking = {
+      id: (crypto?.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2)),
+      nome: name,
+      servico: service.nome,
+      preco: service.preco || "Consultar",
+      duracao: service.duracao || (duration + " min"),
+      duracaoMinutos: duration,
+      data: date,
+      horario: time,
+      criadoEm: new Date().toISOString()
+    };
+
+    try {
+      const bookings = readBookings();
+
+      // Segunda checagem imediatamente antes da gravação.
+      const start = minutesFromTime(time);
+      if (hasConflict(date, start, duration)) {
+        bookingStatus.textContent = "Esse horário acabou de ser reservado. Escolha outro horário.";
+        updateBookingTimes();
+        return;
+      }
+
+      bookings.push(booking);
+      writeBookings(bookings);
+    } catch {
+      bookingStatus.textContent = "Não foi possível salvar o agendamento neste navegador. Tente novamente.";
+      return;
+    }
+
+    const message = [
+      config.whatsappMensagem || "Olá! Gostaria de agendar um horário na barbearia.",
+      "",
+      "Nome: " + booking.nome,
+      "Serviço: " + booking.servico,
+      "Preço: " + booking.preco,
+      "Duração: " + booking.duracao,
+      "",
+      "Data: " + formatDate(booking.data),
+      "Horário: " + booking.horario
+    ].join("\n");
+
+    const whatsappUrl = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
+
+    if (!whatsappNumber || whatsappNumber.length < 10) {
+      bookingStatus.textContent = "O WhatsApp da barbearia ainda não foi configurado.";
+      return;
+    }
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    closeBooking();
+  });
+
+  // ============================================================
+  // TECLADO
+  // ============================================================
   document.addEventListener("keydown", (event) => {
     if (trapFocus(legalModal, event) || trapFocus(lightbox, event) || trapFocus(bookingModal, event)) return;
 
-    if (event.key === "Escape" && legalModal?.classList.contains("is-open")) {
+    if (event.key !== "Escape") return;
+
+    if (legalModal?.classList.contains("is-open")) {
       closeLegal();
       return;
     }
 
-    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+    if (lightbox?.classList.contains("is-open")) {
       closeLightbox();
       return;
     }
 
-    if (event.key === "Escape" && bookingModal?.classList.contains("is-open")) {
+    if (bookingModal?.classList.contains("is-open")) {
       closeBooking();
       return;
     }
 
-    if (event.key === "Escape" && menuToggle.getAttribute("aria-expanded") === "true") {
-      closeMenu(true);
-    }
+    if (menuToggle?.getAttribute("aria-expanded") === "true") closeMenu(true);
   });
 
-  document.querySelector("#current-year").textContent = new Date().getFullYear();
+  const currentYear = document.querySelector("#current-year");
+  if (currentYear) currentYear.textContent = new Date().getFullYear();
 })();
