@@ -317,3 +317,78 @@ button { font: inherit; }
   .whatsapp-float { right: 14px; bottom: 14px; width: 58px; height: 58px; }
   .whatsapp-float svg { width: 34px; height: 34px; }
 }
+
+/* ==========================================================
+   AGENDAMENTO — COMPLEMENTOS
+   ========================================================== */
+.service-booking-button {
+  width: 100%;
+  margin-top: 24px;
+  justify-content: center;
+}
+
+.booking-summary {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  margin-top: 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #171717;
+  color: #aaa;
+}
+
+.booking-summary > strong {
+  color: var(--accent);
+  font-size: .78rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.booking-summary-content {
+  color: #8f8b84;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+
+.booking-summary.is-ready {
+  border-color: color-mix(in srgb, var(--primary-color) 40%, transparent);
+}
+
+.booking-summary.is-ready .booking-summary-content {
+  display: grid;
+  gap: 7px;
+}
+
+.booking-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.booking-summary-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.booking-summary-row span {
+  color: #85817a;
+}
+
+.booking-summary-row strong {
+  color: #f1ede5;
+  text-align: right;
+}
+
+@media (max-width: 480px) {
+  .service-booking-button {
+    min-height: 46px;
+  }
+
+  .booking-summary-row {
+    align-items: flex-start;
+  }
+}
