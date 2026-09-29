@@ -361,8 +361,6 @@
       const action = button.dataset.bookingDateAction;
       const today = todayIso();
       let targetDate = today;
-
-      if (action === "tomorrow") targetDate = addDaysToIso(today, 1);
       if (action === "next") targetDate = findNextOpenDate(today) || today;
 
       bookingDate.value = targetDate;
